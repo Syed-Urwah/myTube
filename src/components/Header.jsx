@@ -6,7 +6,7 @@ import profilePic from '../assets/profile.jpg'
 
 export default function Header() {
   return (
-    <section className="h-16 bg-bl ">
+    <section className="h-16 bg-bg-main ">
       <div className="header h-full w-[96vw] m-auto flex justify-between items-center text-white ">
         <div className="bar flex items-center h-full">
           <img src={bar} alt="" className="w-6" />
