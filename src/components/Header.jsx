@@ -16,7 +16,7 @@ export default function Header() {
         </div>
 
         <div className="search h-full flex items-center">
-            <input className="w-96 h-10 rounded-full pl-2 text-black border-[#1c1c1c] border-solid border-2 bg-transparent" placeholder="Search" type="text" name="" id="" />
+            <input className="w-96 h-10 rounded-full pl-2 text-black border-[#1c1c1c] outline-none border-solid border-2 bg-transparent focus:border-white" placeholder="Search" type="text" name="" id="" />
 
         </div>
 
