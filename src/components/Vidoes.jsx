@@ -4,7 +4,7 @@ import channelPic from '../assets/channel.jpg'
 
 export default function Vidoes() {
   return (
-    <section className="w-screen bg-bg-main flex justify-around flex-wrap pt-10">
+    <section className="w-screen bg-bg-main flex justify-center gap-4 flex-wrap pt-10">
 
       <a href="/" className="video flex flex-col">
         <img className="w-96 mb-3 rounded-2xl" src={thumbnail} alt="" />
