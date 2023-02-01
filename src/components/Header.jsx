@@ -5,10 +5,13 @@ import video from '../assets/add-video.png'
 import profilePic from '../assets/profile.jpg'
 import searchIcon from '../assets/search.svg'
 import leftArrow from '../assets/arrow-left.svg'
+import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 export default function Header() {
 
   const [searchBox, setsearchBox] = useState(false)
+  const location = useLocation()
 
 
   function handleSearchDisplay(){
@@ -31,10 +34,10 @@ export default function Header() {
     <section className="h-16 bg-bg-main pb-4">
       <div className="header h-full w-[96vw] m-auto flex justify-between items-center text-white ">
         <div className={`bar ${!searchBox ? 'flex' : 'hidden'} items-center h-full`}>
-          <img onClick={handleNavBar} src={bar} alt="" className="w-6 xl:hidden hover:cursor-pointer" />
-          <a href="/" className="logo h-full">
+          <img onClick={handleNavBar} src={bar} alt="" className={`w-6 xl:${location.pathname === '/' ? 'hidden' : 'block'} hover:cursor-pointer`} />
+          <Link to="/" className="logo h-full">
             <img src={logo} alt="" className="w-32 h-full" />
-          </a>
+          </Link>
         </div>
 
         <div className={`search h-full flex items-center justify-evenly ${searchBox ? 'w-full' : 'w-auto'}`}>
