@@ -90,15 +90,31 @@ export const unSubscribeUser = async (req, res, next) => {
 
 //like video
 export const likeVideo = async (req, res, next) => {
-    try {
-        
 
+
+    try {
+            const LikedVideo = await Video.findById(req.params.videoId);
+            let userLikes = 0;
+            
+            LikedVideo.likes.map((e)=>{
+                if(e === req.user.id){
+                    userLikes++;
+                }
+            })
+
+            if(userLikes===0){
+                const video = await Video.findByIdAndUpdate(req.params.videoId, {
+                    $push: {likes: req.user.id},
+                    $pull: {dislikes: req.user.id}
+                },{new: true})
+                res.status(200).json(video);
+            }else{
+                res.status(400).send("you already liked this video")
+            }
+
+            
      
-            const video = await Video.findByIdAndUpdate(req.params.videoId, {
-                $push: {likes: req.user.id},
-                $pull: {dislikes: req.user.id}
-            },{new: true})
-            res.status(200).json(video);
+            
        
     } catch (error) {
         next(error)
@@ -108,11 +124,26 @@ export const likeVideo = async (req, res, next) => {
 //unlike video
 export const dislikeVideo = async (req, res, next) => {
     try {
-        const video = await Video.findByIdAndUpdate(req.params.videoId, {
-            $push: {dislikes: req.user.id},
-            $pull: {likes: req.user.id}
-        }, {new: true})
-        res.status(200).json(video);
+
+        const DikedVideo = await Video.findById(req.params.videoId);
+            let userDislikes = 0;
+            
+            DikedVideo.dislikes.map((e)=>{
+                if(e === req.user.id){
+                    userDislikes++;
+                }
+            })
+
+        if(userDislikes === 0){
+            const video = await Video.findByIdAndUpdate(req.params.videoId, {
+                $push: {dislikes: req.user.id},
+                $pull: {likes: req.user.id}
+            }, {new: true})
+            res.status(200).json(video);
+        }else{
+            res.status(400).send("you already dislked this video")
+        }
+        
     } catch (error) {
         next(error)
     }
