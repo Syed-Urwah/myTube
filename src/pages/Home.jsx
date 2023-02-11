@@ -5,7 +5,7 @@ import Vidoes from "../components/Vidoes";
 export default function Home() {
   return (
     <div>
-      <main className="flex">
+      <main id="main" className="flex">
         <Navbar display="block"/>
         <Vidoes />
       </main>

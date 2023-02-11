@@ -1,0 +1,26 @@
+
+.modalAnimationDown{
+    animation: ModalCreateVideo 1s ease-in 0s 1 normal both;
+}
+
+
+@keyframes ModalCreateVideo {
+    from{
+        top: -120vh;
+    }to{
+        top: 0
+    }
+}
+
+.modalAnimationUp{
+    animation: ModalCancelVideo 1s ease-in 0s 1 normal both;
+}
+
+
+@keyframes ModalCancelVideo {
+    from{
+        top: 0;
+    }to{
+        top: -100vh
+    }
+}

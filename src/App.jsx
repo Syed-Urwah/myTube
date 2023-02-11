@@ -5,14 +5,17 @@ import Vidoes from "./components/Vidoes";
 import Home from "./pages/Home";
 import Singlevideo from "./pages/Singlevideo";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Signup from "./pages/Signup";
 
 function App() {
   return (
     <BrowserRouter>
       <Header/>
+      {/* <Navbar/> */}
       <Routes>
-          <Route path="/" element={<Home />}/>
+          <Route path="/" index element={<Home />}/>
           <Route path="/video" element={<Singlevideo />} />
+          <Route path="/signup" element={<Signup/>}/>
       </Routes>
     </BrowserRouter>
   );

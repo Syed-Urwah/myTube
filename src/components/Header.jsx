@@ -7,6 +7,7 @@ import searchIcon from '../assets/search.svg'
 import leftArrow from '../assets/arrow-left.svg'
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import ModalCreateVideo from "./ModalCreateVideo";
 
 export default function Header() {
 
@@ -30,8 +31,18 @@ export default function Header() {
     document.getElementById('nav').classList.toggle('absolute')
   }
 
+  function handleModalVideo(){
+    document.getElementById('modal-video').classList.remove('modalAnimationUp')
+    document.getElementById('modal-video').classList.add('modalAnimationDown')
+    document.getElementById('main').classList.add('opacity-70')
+    document.getElementById('header').classList.add('opacity-70')
+    document.getElementById('body').classList.add('overflow-y-hidden')
+  }
+
   return (
-    <section className="h-16 bg-bg-main pb-4">
+    <>
+    <ModalCreateVideo/>
+    <header id="header" className="h-16 bg-bg-main pb-4">
       <div className="header h-full w-[96vw] m-auto flex justify-between items-center text-white ">
         <div className={`bar ${!searchBox ? 'flex' : 'hidden'} items-center h-full`}>
           <img onClick={handleNavBar} src={bar} alt="" className={`w-6 xl:${location.pathname === '/' ? 'hidden' : 'block'} hover:cursor-pointer`} />
@@ -47,10 +58,11 @@ export default function Header() {
 
         <div className={`profile ${!searchBox ? 'flex' : 'hidden'} gap-5 h-full items-center`}>
             <img onClick={handleSearchDisplay} className="w-5 sm:hidden hover:cursor-pointer" src={searchIcon} alt="" />
-            <img className="w-8 h-8" src={video} alt="" />
+            <img onClick={handleModalVideo} className="w-8 h-8 hover:cursor-pointer" src={video} alt="" />
             <img className="w-8 h-8 rounded-full" src={profilePic} alt="" />
         </div>
       </div>
-    </section>
+    </header>
+    </>
   );
 }
