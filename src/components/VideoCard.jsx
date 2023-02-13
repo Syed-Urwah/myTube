@@ -1,19 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import thumbnail from "../assets/thumbnail.jpg";
 import channelPic from '../assets/channel.jpg';
+import { Link } from "react-router-dom";
+import {format} from 'timeago.js'
+import axios from 'axios'
 
-export default function VideoCard() {
+export default function VideoCard({data}) {
+
+  const [channel, setChannel] = useState({})
+
+    
+  async function fetchChannel(){
+    const res = await axios.get(`http://localhost:8000/api/user/find/${data.userId}`);
+    setChannel(res.data)
+  }
+
+  useEffect(()=>{
+  
+    fetchChannel()
+  },[])
+
+
   return (
-    <a href="/" className="video flex flex-col">
+    <Link to="/video" className="video flex flex-col">
       <img className="w-96 mb-3 rounded-2xl" src={thumbnail} alt="" />
       <div className="video-details flex">
         <img className="rounded-full w-12 h-12" src={channelPic} alt="" />
         <div className="details pl-5">
-          <h2 className="video-title text-white">Neo4j in 100 seconds</h2>
-          <p className="channel text-[#aaaaaa]">Fireship</p>
-          <p className="views text-[#aaaaaa]">245k views . 4 days ago</p>
+          <h2 className="video-title text-white">{data.title}</h2>
+          <p className="channel text-[#aaaaaa] capitalize">{channel.name}</p>
+          <p className="views text-[#aaaaaa]">{data.views} views . {format(data.createdAt)}</p>
         </div>
       </div>
-    </a>
+    </Link>
   );
 }

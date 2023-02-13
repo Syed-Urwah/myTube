@@ -8,12 +8,15 @@ import leftArrow from '../assets/arrow-left.svg'
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import ModalCreateVideo from "./ModalCreateVideo";
+import {useSelector} from 'react-redux'
 
 export default function Header() {
 
+  const currentUser = useSelector(state=>state.user.currentUser)
   const [searchBox, setsearchBox] = useState(false)
   const location = useLocation()
 
+  
 
   function handleSearchDisplay(){
     if(!searchBox){
@@ -56,11 +59,13 @@ export default function Header() {
             <input className={`md:w-96 sm:w-60 sm:block w-4/5 ${searchBox ? 'block' : 'hidden'} h-10 rounded-full pl-2 text-white border-[#1c1c1c] outline-none border-solid border-2 bg-transparent focus:border-white`} autoFocus={searchBox} placeholder="Search" type="text" name="search" id="search-box" />
         </div>
 
+        {Object.keys(currentUser).length === 0 ? "login" : 
         <div className={`profile ${!searchBox ? 'flex' : 'hidden'} gap-5 h-full items-center`}>
             <img onClick={handleSearchDisplay} className="w-5 sm:hidden hover:cursor-pointer" src={searchIcon} alt="" />
             <img onClick={handleModalVideo} className="w-8 h-8 hover:cursor-pointer" src={video} alt="" />
-            <img className="w-8 h-8 rounded-full" src={profilePic} alt="" />
+            <img className="w-8 h-8 rounded-full" src={currentUser.img} alt="" />
         </div>
+        }
       </div>
     </header>
     </>

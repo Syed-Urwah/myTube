@@ -7,7 +7,7 @@ export default function Home() {
     <div>
       <main id="main" className="flex">
         <Navbar display="block"/>
-        <Vidoes />
+        <Vidoes type="random" />
       </main>
     </div>
   );
