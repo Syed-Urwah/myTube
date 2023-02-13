@@ -6,6 +6,7 @@ import userRoute from './routes/user.js'
 import videoRoute from './routes/video.js'
 import commentRoute from './routes/comment.js'
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
 
 const dotenvConfig = dotenv.config();
 
@@ -22,6 +23,7 @@ app.get("/" , (req,res)=>{
 })
 
 //middle-wares
+app.use(cors())
 app.use(cookieParser())
 app.use(express.json())
 app.use('/api/auth', authRoute)

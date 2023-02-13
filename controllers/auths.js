@@ -24,9 +24,9 @@ export async function login(req,res,next){
     try {
         const user = await User.findOne({name: req.body.name})
         if(!user){
-            res.status("400").json("User not found")
-        }
-        const checkPassword = await bcrypt.compare(req.body.password, user.password);
+            res.status(400).send("User not found")
+        }else{
+            const checkPassword = await bcrypt.compare(req.body.password, user.password);
         if(!checkPassword){
             res.status(400).json("Incorrect credentials")
         }
@@ -40,6 +40,8 @@ export async function login(req,res,next){
         res.cookie("access_token", token, {
             httpOnly: true
         }).status(200).json(others)
+        }
+        
     } catch (error) {
         next(error)
     }
@@ -47,3 +49,33 @@ export async function login(req,res,next){
 
 
 }
+
+export const googleAuth = async (req,res,next) =>{
+
+    try {
+        const user = await User.findOne({email: req.body.email})
+    //Login with google
+    if(user){
+        const token = jwt.sign({id: user._id}, process.env.SECRET_KEY);
+        res.cookie("access_token", token,{
+            httpOnly: true
+        }).status(200).json(user)
+    }
+    //SignUp with google
+    else{
+        const newUser = new User({
+            ...req.body,
+            fromGoogle: true
+        });
+        const saveUser = await newUser.save();
+        const token = jwt.sign({id: saveUser._id},process.env.SECRET_KEY);
+        res.cookie("access_token", token , {
+            httpOnly: true
+        }).status(200).json(saveUser);
+    }
+
+    } catch (error) {
+        next(error)
+    }
+
+    }
