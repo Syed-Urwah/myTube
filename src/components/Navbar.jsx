@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from "react";
+import React from "react";
 import homeLogo from "../assets/home-logo.png";
 import MdNavbar from "./MdNavbar";
 import picpeople from '../assets/picpeople.svg'
@@ -11,18 +11,12 @@ export default function Navbar(props) {
   const currentUser = useSelector(state=> state.user.currentUser)
 
   let location = useLocation()
-  const [nav, setnav] = useState(false)
 
-  useEffect(() => {
-    if(props.display === "block"){
-      setnav(true)
-    }
-  }, [])
-  
+ 
 
   return (
     <>
-    <section id="nav" className={`${nav && 'xl:block'} hidden pt-3 w-72 min-h-[calc(100vh-64px)] bg-bg-main text-white`}>
+    <section id="nav" className={`${location.pathname !== '/video' && 'xl:block'} hidden pt-3 w-72 min-h-[calc(100vh-64px)] bg-bg-main text-white`}>
       <div className="s w-full flex flex-col justify-center">
 
         <Link to="/" className="home w-[80%] flex h-10 justify-center items-center border-solid hover:bg-[#272727] rounded-xl ">

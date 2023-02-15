@@ -12,6 +12,11 @@ function App() {
   return (
     <BrowserRouter>
       <Header/>
+      <div>
+      <main id="main" className="flex bg-bg-main">
+        <Navbar/>
+        {/* <Vidoes type="random" /> */}
+     
       {/* <Navbar/> */}
       <Routes>
           <Route path="/" index element={<Home />}/>
@@ -19,6 +24,8 @@ function App() {
           <Route path="/sub" element={<Subscribe/>}/>
           <Route path="/signup" element={<Signup/>}/>
       </Routes>
+      </main>
+      </div>
     </BrowserRouter>
   );
 }

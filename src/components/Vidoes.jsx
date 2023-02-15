@@ -12,8 +12,13 @@ export default function Vidoes(props) {
 
   useEffect(()=>{
     async function getVideos(){
-      const response = await axios.get(`http://localhost:8000/api/video/${props.type}`)
+      const response = await axios.get(`http://localhost:8000/api/video/${props.type}`,{
+        headers:{
+          'access_token': localStorage.getItem('auth-token')
+        }
+      })
       setVideos(response.data);
+      console.log(response)
     }
     getVideos();
   },[props.type])
@@ -22,10 +27,10 @@ export default function Vidoes(props) {
   return (
     <section className="w-screen bg-bg-main flex justify-center gap-4 flex-wrap pt-10">
       
-      {videos ?
+      {
       videos.map((e)=>{
         return <VideoCard key={e._id} data={e}/>
-      }): "no videos to show"}
+      })}
 
     </section>
   );

@@ -31,8 +31,9 @@ export default function SingleVideo() {
     
 
   return (
-    <main id='main' className='bg-bg-main'>
-        <Navbar display="hidden1"/>
+    // <main id='main' className='bg-bg-main'>
+    <>
+        {/* <Navbar display="hidden1"/> */}
     <section className='xl:max-w-screen-2xl mx-auto text-white flex flex-col lg:flex-row gap-4'>
         <section className="video-section xl:max-w-[70%] lg:max-w-[62%] flex flex-col lg:ml-4">
             <video width="100%" height="auto" controls>
@@ -88,6 +89,7 @@ export default function SingleVideo() {
         
         {resComments && <Comments/>}
         </section>
-        </main>
+        </>
+        // </main>
   )
 }

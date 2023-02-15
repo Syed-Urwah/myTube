@@ -35,6 +35,8 @@ export default function Header() {
   }
 
   function handleModalVideo(){
+    document.getElementById('modal-video').classList.add('flex')
+    document.getElementById('modal-video').classList.remove('hidden')
     document.getElementById('modal-video').classList.remove('modalAnimationUp')
     document.getElementById('modal-video').classList.add('modalAnimationDown')
     document.getElementById('main').classList.add('opacity-70')
@@ -48,7 +50,7 @@ export default function Header() {
     <header id="header" className="h-16 bg-bg-main pb-4">
       <div className="header h-full w-[96vw] m-auto flex justify-between items-center text-white ">
         <div className={`bar ${!searchBox ? 'flex' : 'hidden'} items-center h-full`}>
-          <img onClick={handleNavBar} src={bar} alt="" className={`w-6 xl:${location.pathname === '/' ? 'hidden' : 'block'} hover:cursor-pointer`} />
+          <img onClick={handleNavBar} src={bar} alt="" className={`w-6 xl:${location.pathname !== '/video' ? 'hidden' : 'block'} hover:cursor-pointer`} />
           <Link to="/" className="logo h-full">
             <img src={logo} alt="" className="w-32 h-full" />
           </Link>

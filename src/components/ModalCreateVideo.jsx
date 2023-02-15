@@ -10,13 +10,15 @@ export default function ModalCreateVideo() {
     document.getElementById('main').classList.remove('opacity-70')
     document.getElementById('header').classList.remove('opacity-70')
     document.getElementById('body').classList.remove('overflow-y-hidden')
+    document.getElementById('modal-video').classList.remove('flex')
+    document.getElementById('modal-video').classList.add('hidden')
   }
   
 
   return (
     <section
       id="modal-video"
-      className="absolute text-white w-1/4 justify-center items-start mx-auto flex flex-col top-[-120vh] left-0 right-0 z-10 bg-bg-main rounded-2xl py-10 px-5"
+      className="absolute hidden text-white w-1/4 justify-center items-start mx-auto  flex-col top-[-120vh] left-0 right-0 z-10 bg-bg-main rounded-2xl py-10 px-5"
     >
       <h2 className="text-2xl">Add a Video</h2>
       <form className="flex flex-col gap-5 w-full">

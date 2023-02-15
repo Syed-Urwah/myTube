@@ -14,7 +14,7 @@ export default function SignupCard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [user , setUser] = useState({
-    name: "",
+    email: "",
     password: ""
   })
   const [hover, sethover] = useState(false)
@@ -36,10 +36,10 @@ export default function SignupCard() {
 
   //getting the input values
   function getValue(){
-    let name_value = document.getElementById('name').value;
+    let email_value = document.getElementById('email').value;
     let password_value = document.getElementById('password').value;
     setUser({
-      name: name_value,
+      email: email_value,
       password: password_value
     })
     console.log(user)
@@ -61,6 +61,7 @@ export default function SignupCard() {
     });
 
     let data = await response.data
+    localStorage.setItem('auth-token', data.token)
     console.log(data)
 
      dispatch(loginSuccess(response.data));
@@ -113,7 +114,7 @@ export default function SignupCard() {
             <p>or</p>
             <h2 className='text-4xl font-semibold'>Sign In</h2>
             <div className="inputs flex flex-col gap-3">
-              <input onChange={getValue} className='border-2 border-solid border-[#30303d] rounded-xl w-80 py-2 bg-inherit placeholder-white' placeholder='   Name' type="text" name="name" id="name" />
+              <input onChange={getValue} className='border-2 border-solid border-[#30303d] rounded-xl w-80 py-2 bg-inherit placeholder-white' placeholder='   Email' type="email" name="email" id="email" />
               <input onChange={getValue} className='border-2 border-solid border-[#30303d] rounded-xl w-80 py-2 bg-inherit placeholder-white' placeholder='   Password' type="password" name="password" id="password" />
             </div>
 
