@@ -22,7 +22,7 @@ export async function signup(req, res,next) {
 
 export async function login(req,res,next){
     try {
-        const user = await User.findOne({name: req.body.name})
+        const user = await User.findOne({email: req.body.email})
         if(!user){
             res.status(400).send("User not found")
         }else{
@@ -33,13 +33,13 @@ export async function login(req,res,next){
 
         //removing password property
         const {password, ...others} = user._doc; //others includes all the property except password
-
+        
         //using jwt when user login
         const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
         //storing jwt token as a cookie 
         res.cookie("access_token", token, {
             httpOnly: true
-        }).status(200).json(others)
+        }).status(200).json({user, token})
         }
         
     } catch (error) {
@@ -59,7 +59,7 @@ export const googleAuth = async (req,res,next) =>{
         const token = jwt.sign({id: user._id}, process.env.SECRET_KEY);
         res.cookie("access_token", token,{
             httpOnly: true
-        }).status(200).json(user)
+        }).status(200).json({user, token})
     }
     //SignUp with google
     else{
@@ -68,10 +68,11 @@ export const googleAuth = async (req,res,next) =>{
             fromGoogle: true
         });
         const saveUser = await newUser.save();
+        const user = saveUser
         const token = jwt.sign({id: saveUser._id},process.env.SECRET_KEY);
         res.cookie("access_token", token , {
             httpOnly: true
-        }).status(200).json(saveUser);
+        }).status(200).json({user, token});
     }
 
     } catch (error) {
