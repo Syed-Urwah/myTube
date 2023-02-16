@@ -21,16 +21,18 @@ export default function Vidoes(props) {
       console.log(response)
     }
     getVideos();
+
+    console.log(videos.length)
   },[props.type])
 
 
   return (
-    <section className="w-screen bg-bg-main flex justify-center gap-4 flex-wrap pt-10">
+    <section className="w-screen bg-bg-main flex justify-center gap-4 flex-wrap pt-10 text-white">
       
-      {
-      videos.map((e)=>{
+      {videos.length > 0 ? videos.map((e)=>{
         return <VideoCard key={e._id} data={e}/>
-      })}
+      }): "no video"}
+      
 
     </section>
   );

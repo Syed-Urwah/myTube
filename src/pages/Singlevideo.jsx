@@ -8,10 +8,23 @@ import saveIcon from '../assets/layer-plus.svg'
 import Comments from '../components/Comments'
 import RecommendedCard from '../components/RecommendedCard'
 import Navbar from '../components/Navbar'
+import axios from 'axios'
+import { useParams } from 'react-router-dom'
+import { format } from 'timeago.js'
+import { useDispatch, useSelector } from 'react-redux'
+import { loginSuccess } from '../redux/user/CurrentUserSlice'
 
 export default function SingleVideo() {
 
+    const dispatch = useDispatch();
+
     const [resComments, setresComments] = useState(false)
+    const [video , setVideo] = useState({});
+    const [user , setUser] = useState({});
+    const [subscribe, setSubscribe] = useState(false);
+    let {id} = useParams();
+
+    const currentUser = useSelector(state => state.user.currentUser)
 
     function browserWidth (){
         let width = window.innerWidth;
@@ -23,17 +36,98 @@ export default function SingleVideo() {
             }
     }
 
+    //fetching video
+    const fetchVideo = async () =>{
+        try {
+            const response = await axios.get(`http://localhost:8000/api/video/fetchVideo/${id}`)
+            let data = await response.data
+            setVideo(data);
+            console.log(video)
+            //getting user of the video
+            const res = await axios.get(`http://localhost:8000/api/user/find/${data.userId}`)
+            setUser(res.data);
+            console.log(res.data._id)
+
+            //checking the subscribtion
+            if(currentUser.subscribedUsers.includes(res.data._id)){
+                setSubscribe(true)
+                console.log("user already subscribed this channel")
+            }else{
+                setSubscribe(false)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+      
+    }
+
+    //increasing the video views by 1
+    const increaseVideViews = async () =>{
+        const response = await axios.put(`http://localhost:8000/api/video/views/${id}`)
+        
+        console.log(response.data);
+    }
+
+    //subscribe
+    async function handleSubscribe (){
+            const response = await axios({
+                method: 'put',
+                url: `http://localhost:8000/api/user/sub/${user._id}`,
+                headers: {
+                    'access_token': localStorage.getItem('auth-token')
+                }, 
+                
+              });
+            let data = await response.data;
+            console.log(response.data);
+            dispatch(loginSuccess(response.data));
+            setSubscribe(true);
+       
+        
+    }
+
+    //unsubscribe
+    async function handleUnSubscribe (){
+        const response = await axios({
+            method: 'put',
+            url: `http://localhost:8000/api/user/unsub/${user._id}`,
+            headers: {
+                'access_token': localStorage.getItem('auth-token')
+            }, 
+            
+          });
+        let data = await response.data;
+        console.log(response.data);
+        dispatch(loginSuccess(response.data));
+        setSubscribe(false);
+   
+    
+}
+
+
+
+    
+
+    
+
     useEffect(() => {
         window.onresize = browserWidth
         window.onload = browserWidth
         
-    }, [])
+        console.log(localStorage.getItem('auth-token'))
+        increaseVideViews();
+        fetchVideo();
+       
+        // console.log(currentUser.subscribedUsers.includes(user._id))
+        console.log(user._id)
+        
+    },[])
     
 
   return (
     // <main id='main' className='bg-bg-main'>
     <>
-        {/* <Navbar display="hidden1"/> */}
+        {/* <Navbar display="hidden1" videoId={id}/> */}
     <section className='xl:max-w-screen-2xl mx-auto text-white flex flex-col lg:flex-row gap-4'>
         <section className="video-section xl:max-w-[70%] lg:max-w-[62%] flex flex-col lg:ml-4">
             <video width="100%" height="auto" controls>
@@ -41,23 +135,25 @@ export default function SingleVideo() {
             </video>
             <div className='flex flex-col gap-4'>
 
-            <h2 className='font-semibold text-2xl'>Learn Web Components In 25 Minutes</h2>
+            <h2 className='font-semibold text-2xl'>{video.title}</h2>
 
             <div className="channel flex lg:flex-nowrap flex-wrap justify-between items-center w-full gap-2">
 
                 <div className="left flex items-center gap-5">
-                    <img className='w-12 h-12 rounded-full' src={profilePic} alt="" />
+                    <img className='w-12 h-12 rounded-full' src={user.img} alt="" />
                     <div className='flex flex-col'>
-                        <h2 className='text-lg'>Channel Name</h2>
-                        <p className='text-[#aaaaaa]'>1.2M subscribers</p>
+                        <h2 className='text-lg'>{user.name}</h2>
+                        <p className='text-[#aaaaaa]'>{user.subscribers} subscribers</p>
                     </div>
-                    <button className='border-solid bg-white text-black rounded-xl px-3 py-1 text-sm font-semibold'>Subscribe</button>
+                    {!subscribe?<button onClick={handleSubscribe} className='border-solid bg-white text-black rounded-xl px-3 py-1 text-sm font-semibold'>Subscribe</button>
+                    :<button onClick={handleUnSubscribe} className='border-solid bg-[#2d2b2b] text-white rounded-xl px-3 py-1 text-sm font-semibold'>UnSubscribe</button>
+                }  
                 </div>
 
                 <div className="right flex gap-5 items-center">
                     <div className="like-dislike flex items-center gap-4 gray-button">
                         <img className='w-5 h-5 hover:cursor-pointer' src={likeIcon} alt="" />
-                        <p className='border-r-2 pr-2'>3.5k</p>
+                        <p className='border-r-2 pr-2'>{video.likes === undefined ? "0" : video.likes.length}</p>
                         <img className='w-5 h-5' src={dislikeIcon} alt="" />
                     </div>
                     <div className="share flex gap-2 items-center gray-button">
@@ -73,8 +169,8 @@ export default function SingleVideo() {
             </div>
 
             <div className="description bg-border-bg px-2 py-2 rounded-2xl w-full">
-                <p>95k views 9 days ago</p>
-                <p className='description'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi, quia! Eligendi ad deserunt inventore nesciunt, odit velit earum quibusdam dolore perferendis natus delectus blanditiis sequi, saepe, laboriosam tempora vitae. Magnam.</p>
+                <p>{video.views} views {format(video.createdAt)}</p>
+                <p className='description'>{video.desc}</p>
             </div>
 
             {!resComments && <Comments/>}

@@ -9,18 +9,17 @@ import Signup from "./pages/Signup";
 import Subscribe from "./pages/Subscribe";
 
 function App() {
+  
   return (
     <BrowserRouter>
       <Header/>
       <div>
       <main id="main" className="flex bg-bg-main">
-        <Navbar/>
-        {/* <Vidoes type="random" /> */}
-     
-      {/* <Navbar/> */}
+       <Navbar/>
+      
       <Routes>
-          <Route path="/" index element={<Home />}/>
-          <Route path="/video" element={<Singlevideo />} />
+          <Route exact path="/" index element={<Home />}/>
+          <Route path="/video/:id" element={<Singlevideo />} />
           <Route path="/sub" element={<Subscribe/>}/>
           <Route path="/signup" element={<Signup/>}/>
       </Routes>

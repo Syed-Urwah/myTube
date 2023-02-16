@@ -43,6 +43,15 @@ export default function Header() {
     document.getElementById('header').classList.add('opacity-70')
     document.getElementById('body').classList.add('overflow-y-hidden')
   }
+  
+
+  function hamburgerControll1(path){
+    if(path !== "/" && path !== "/sub"){
+      return "block"
+    }else{
+      return "hidden"
+    }
+  }
 
   return (
     <>
@@ -50,7 +59,7 @@ export default function Header() {
     <header id="header" className="h-16 bg-bg-main pb-4">
       <div className="header h-full w-[96vw] m-auto flex justify-between items-center text-white ">
         <div className={`bar ${!searchBox ? 'flex' : 'hidden'} items-center h-full`}>
-          <img onClick={handleNavBar} src={bar} alt="" className={`w-6 xl:${location.pathname !== '/video' ? 'hidden' : 'block'} hover:cursor-pointer`} />
+          <img onClick={handleNavBar} src={bar} alt="" className={`w-6 xl:${hamburgerControll1(location.pathname)} hover:cursor-pointer`} />
           <Link to="/" className="logo h-full">
             <img src={logo} alt="" className="w-32 h-full" />
           </Link>

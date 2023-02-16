@@ -64,7 +64,7 @@ export default function SignupCard() {
     localStorage.setItem('auth-token', data.token)
     console.log(data)
 
-     dispatch(loginSuccess(response.data));
+     dispatch(loginSuccess(response.data.user));
      navigate('/');
 
     } catch (error) {
@@ -85,7 +85,10 @@ export default function SignupCard() {
           img: googleResponse.user.photoURL
         })
         console.log(res);
-        dispatch(loginSuccess(res.data))
+        let data = await res.data
+        localStorage.setItem('auth-token', data.token)
+        dispatch(loginSuccess(data.user))
+        navigate('/')
       } catch (error) {
         dispatch(loginFailed(error))
       }
@@ -96,9 +99,7 @@ export default function SignupCard() {
 
   return (
 
-    <>
-    <Navbar/>
-    <section className='bg-bg-main text-white min-h-[calc(100vh-64px)]'>
+    <section className='bg-bg-main text-white min-h-[calc(100vh-64px)] mx-auto'>
         <form className='w-full flex flex-col justify-center items-center gap-3 pt-10'>
             <h2 className='text-4xl font-semibold'>Sign Up</h2>
             <button onClick={handleGoogleLogin} onMouseLeave={handleGoogleLogo} onMouseEnter={handleGoogleLogo} className='flex items-center border-2 border-solid border-[#30303d] rounded-xl py-2 gap-4 w-80 justify-center hover:bg-white hover:text-black'>
@@ -122,6 +123,5 @@ export default function SignupCard() {
            
         </form>
     </section>
-    </>
   )
 }

@@ -22,7 +22,7 @@ export default function VideoCard({data}) {
 
 
   return (
-    <Link to="/video" className="video flex flex-col">
+    <Link to={`/video/${data._id}`} className="video flex flex-col">
       <img className="w-96 mb-3 rounded-2xl" src={thumbnail} alt="" />
       <div className="video-details flex">
         <img className="rounded-full w-12 h-12" src={channelPic} alt="" />
