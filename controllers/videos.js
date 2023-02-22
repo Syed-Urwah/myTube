@@ -119,6 +119,17 @@ export const byTag = async (req,res,next) =>{
     
 }
 
+//video by category
+export const byCategory = async (req,res,next) =>{
+    try {
+        const categroy = req.query.catg
+        const video = await Video.find({category: {$in: categroy}}).limit(20);
+        res.status(200).json(video);
+    } catch (error) {
+        next(error)
+    }
+}
+
 export const bySearch = async (req,res,next) =>{
     try {
         const search = req.query.q;

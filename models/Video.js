@@ -20,6 +20,10 @@ const videoSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    category:{
+        type: String,
+        required: true
+    },
     tags:{
         type: [String]
     },

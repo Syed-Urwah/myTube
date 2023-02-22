@@ -1,5 +1,5 @@
 import express from 'express'
-import { addVideo, bySearch, byTag, deleteVideo, randomVideos, sub, trend, updateVideo, videoById, videoViews } from '../controllers/videos.js';
+import { addVideo, byCategory, bySearch, byTag, deleteVideo, randomVideos, sub, trend, updateVideo, videoById, videoViews } from '../controllers/videos.js';
 import verifyToken from '../verifyToken.js';
 
 const router = express.Router();
@@ -30,6 +30,9 @@ router.put('/views/:id', videoViews)
 
 //get byTag
 router.get('/tags', byTag)
+
+//get byCategory
+router.get('/category', byCategory)
 
 //get bySearch
 router.get('/search', bySearch)

@@ -114,7 +114,10 @@ export const likeVideo = async (req, res, next) => {
                 },{new: true})
                 res.status(200).json(video);
             }else{
-                res.status(400).send("you already liked this video")
+                const video = await Video.findByIdAndUpdate(req.params.videoId,{
+                    $pull: {likes: req.user.id}
+                },{new: true})
+                res.status(200).json(video)
             }
 
             
@@ -146,7 +149,10 @@ export const dislikeVideo = async (req, res, next) => {
             }, {new: true})
             res.status(200).json(video);
         }else{
-            res.status(400).send("you already dislked this video")
+            const video = await Video.findByIdAndUpdate(req.params.videoId,{
+                $pull: {dislikes: req.user.id}
+            },{new: true})
+            res.status(200).json(video)
         }
         
     } catch (error) {

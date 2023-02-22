@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
+import unique from 'mongoose-unique-validator'
 
 const userSchema = new mongoose.Schema({
-   name:{
-    type: String,
-    unique: false,
-    required: true
-   },
+    name:{
+        type: String,
+        required: true
+    },
     email:{
         type: String,
         required: true,
@@ -15,7 +15,8 @@ const userSchema = new mongoose.Schema({
         type: String,
     },
     subscribers:{
-        type: Number
+        type: Number,
+        default: 0
     },
     subscribedUsers:{
         type: [String]
@@ -32,4 +33,8 @@ const userSchema = new mongoose.Schema({
 {timestamps: true}
 )
 
+userSchema.plugin(unique, { type: 'mongoose-unique-validator' })
+
 export default mongoose.model("User", userSchema)
+const Foo = mongoose.model('User', userSchema);
+// Foo.reIndex();

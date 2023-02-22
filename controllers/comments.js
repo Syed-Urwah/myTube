@@ -10,7 +10,7 @@ export const addComment = async (req,res,next) =>{
             videoId: req.params.videoId,
             desc: req.body.desc
         })
-        newComment.save()
+        let saveComment = newComment.save()
         res.status(200).json(newComment);
     } catch (error) {
         next(error)
