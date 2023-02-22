@@ -13,6 +13,7 @@ export default function VideoCard({data}) {
   async function fetchChannel(){
     const res = await axios.get(`http://localhost:8000/api/user/find/${data.userId}`);
     setChannel(res.data)
+    console.log(res.data)
   }
 
   useEffect(()=>{
@@ -23,9 +24,9 @@ export default function VideoCard({data}) {
 
   return (
     <Link to={`/video/${data._id}`} className="video flex flex-col">
-      <img className="w-96 mb-3 rounded-2xl" src={thumbnail} alt="" />
+      <img className="w-96 mb-3 rounded-2xl h-60 hover:opacity-30" src={data.imgUrl} alt="" />
       <div className="video-details flex">
-        <img className="rounded-full w-12 h-12" src={channelPic} alt="" />
+        <img className="rounded-full w-12 h-12" src={channel.img} alt="" />
         <div className="details pl-5">
           <h2 className="video-title text-white">{data.title}</h2>
           <p className="channel text-[#aaaaaa] capitalize">{channel.name}</p>

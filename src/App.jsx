@@ -14,7 +14,7 @@ function App() {
     <BrowserRouter>
       <Header/>
       <div>
-      <main id="main" className="flex bg-bg-main">
+      <main id="main" className="flex bg-bg-main min-h-[94vh]">
        <Navbar/>
       
       <Routes>

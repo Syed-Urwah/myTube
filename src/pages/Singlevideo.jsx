@@ -1,8 +1,6 @@
 import React,{useEffect, useState} from 'react'
 import demoVideo from '../assets/demo-video.mp4'
-import profilePic from '../assets/profile.jpg'
-import likeIcon from '../assets/like.svg'
-import dislikeIcon from '../assets/dislike.svg'
+
 import shareIcon from '../assets/share.svg'
 import saveIcon from '../assets/layer-plus.svg'
 import Comments from '../components/Comments'
@@ -13,15 +11,22 @@ import { useParams } from 'react-router-dom'
 import { format } from 'timeago.js'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginSuccess } from '../redux/user/CurrentUserSlice'
+import ThumbUpOffAltOutlinedIcon from '@mui/icons-material/ThumbUpOffAltOutlined';
+import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 
 export default function SingleVideo() {
 
     const dispatch = useDispatch();
-
     const [resComments, setresComments] = useState(false)
     const [video , setVideo] = useState({});
     const [user , setUser] = useState({});
     const [subscribe, setSubscribe] = useState(false);
+    const [like, setLike] = useState(false)
+    const [dislike, setDislike] =useState(false);
+    const [recVideos, setRecVideos] = useState([])
+    const [catgVideos, setCatgVideos] = useState([])
     let {id} = useParams();
 
     const currentUser = useSelector(state => state.user.currentUser)
@@ -43,6 +48,17 @@ export default function SingleVideo() {
             let data = await response.data
             setVideo(data);
             console.log(video)
+
+            //getting recommended videos
+            const recRes = await axios.get(`http://localhost:8000/api/video/tags?tag=${data.tags}`)
+            console.log(recRes.data)
+            setRecVideos(recRes.data);
+
+            //get same category videos
+            const catg = await axios.get(`http://localhost:8000/api/video/category?catg=${data.category}`);
+            console.log(catg)
+            setCatgVideos(catg.data)
+
             //getting user of the video
             const res = await axios.get(`http://localhost:8000/api/user/find/${data.userId}`)
             setUser(res.data);
@@ -55,9 +71,28 @@ export default function SingleVideo() {
             }else{
                 setSubscribe(false)
             }
+
+            //checking user likes
+            if(data.likes.includes(currentUser._id)){
+                console.log('user already liked this video')
+                setLike(true);
+            }else{
+                setLike(false)
+            }
+            //checking user dislikes
+            if(data.dislikes.includes(currentUser._id)){
+                setDislike(true)
+                console.log("user already disliked")
+            }else{
+                setDislike(false)
+            }
         } catch (error) {
             console.log(error)
         }
+      
+    }
+
+    const fetchRecommendedVideos = async () =>{
       
     }
 
@@ -82,27 +117,86 @@ export default function SingleVideo() {
             console.log(response.data);
             dispatch(loginSuccess(response.data));
             setSubscribe(true);
+            user.subscribers++
        
         
     }
 
     //unsubscribe
     async function handleUnSubscribe (){
+        if(Object.keys(currentUser).length !== 0){
+            const response = await axios({
+                method: 'put',
+                url: `http://localhost:8000/api/user/unsub/${user._id}`,
+                headers: {
+                    'access_token': localStorage.getItem('auth-token')
+                }, 
+                
+              });
+            let data = await response.data;
+            console.log(response.data);
+            dispatch(loginSuccess(response.data));
+            setSubscribe(false);
+            user.subscribers--
+        }else{
+            console.log("kindly login first")
+        }
+       
+   
+    
+}
+
+    const handleLike = async () =>{
+        if(Object.keys(currentUser).length !== 0){
+            const response = await axios({
+                method: 'put',
+                url: `http://localhost:8000/api/user/like/${video._id}`,
+                headers: {
+                    'access_token': localStorage.getItem('auth-token')
+                }, 
+                
+              });
+              let data = await response.data;
+              console.log(data);
+            if(!like){
+              setLike(true);
+              setDislike(false)
+              video.likes.length++
+            }else{
+                setLike(false);
+                video.likes.length--
+            }
+        }else{
+            console.log("user not signIn")
+        }
+        
+    }   
+
+    const handleDisLike = async () =>{
         const response = await axios({
             method: 'put',
-            url: `http://localhost:8000/api/user/unsub/${user._id}`,
+            url: `http://localhost:8000/api/user/unlike/${video._id}`,
             headers: {
                 'access_token': localStorage.getItem('auth-token')
             }, 
             
           });
-        let data = await response.data;
-        console.log(response.data);
-        dispatch(loginSuccess(response.data));
-        setSubscribe(false);
-   
+          let data = await response.data;
+          console.log(data);
+
+        //if user didnt dislike before
+        if(!dislike){
+              setLike(false);
+              setDislike(true)
+        }else{
+            setDislike(false)
+        }
+          
+        
+        
+    }
     
-}
+    
 
 
 
@@ -117,11 +211,10 @@ export default function SingleVideo() {
         console.log(localStorage.getItem('auth-token'))
         increaseVideViews();
         fetchVideo();
-       
         // console.log(currentUser.subscribedUsers.includes(user._id))
-        console.log(user._id)
+        console.log(video)
         
-    },[])
+    },[id])
     
 
   return (
@@ -130,9 +223,11 @@ export default function SingleVideo() {
         {/* <Navbar display="hidden1" videoId={id}/> */}
     <section className='xl:max-w-screen-2xl mx-auto text-white flex flex-col lg:flex-row gap-4'>
         <section className="video-section xl:max-w-[70%] lg:max-w-[62%] flex flex-col lg:ml-4">
-            <video width="100%" height="auto" controls>
-                <source src={demoVideo} type='video/mp4'/>
-            </video>
+            
+            <div className="video-wrapper w-full max-h-[600px]">
+                <video className='h-full' src={video.videoUrl} width="100%" controls/>
+            </div>
+                
             <div className='flex flex-col gap-4'>
 
             <h2 className='font-semibold text-2xl'>{video.title}</h2>
@@ -152,9 +247,18 @@ export default function SingleVideo() {
 
                 <div className="right flex gap-5 items-center">
                     <div className="like-dislike flex items-center gap-4 gray-button">
-                        <img className='w-5 h-5 hover:cursor-pointer' src={likeIcon} alt="" />
+                        <button onClick={handleLike}>
+                        {!like ? <ThumbUpOffAltOutlinedIcon/>
+                        :<ThumbUpAltIcon/>
+                        }
+                        </button>
+                        
                         <p className='border-r-2 pr-2'>{video.likes === undefined ? "0" : video.likes.length}</p>
-                        <img className='w-5 h-5' src={dislikeIcon} alt="" />
+                        <button onClick={handleDisLike}>
+                            {!dislike ? <ThumbDownAltOutlinedIcon/>
+                            :<ThumbDownAltIcon/>
+                            }
+                        </button>
                     </div>
                     <div className="share flex gap-2 items-center gray-button">
                         <img className='w-5 h-5' src={shareIcon} alt="" />
@@ -163,7 +267,7 @@ export default function SingleVideo() {
 
                     <div className="share flex gap-2 items-center gray-button">
                         <img className='w-5 h-5' src={saveIcon} alt="" />
-                        <p>Share</p>
+                        <p>Save</p>
                     </div>
                 </div>
             </div>
@@ -173,17 +277,29 @@ export default function SingleVideo() {
                 <p className='description'>{video.desc}</p>
             </div>
 
-            {!resComments && <Comments/>}
+            {!resComments && <Comments videoId = {video._id}/>}
 
             </div>
         </section>
 
         <section className="flex flex-col lg:items-center items-start lg:w-2/5 gap-3 ml-4">
-        <RecommendedCard/>
-        <RecommendedCard/>
+            {recVideos.map((e)=>{
+                if(e._id !== video._id){
+                    return <RecommendedCard key={e._id} video = {e}/>
+                }
+                
+            })}
+
+            {catgVideos.map((e)=>{
+                if(e._id !== video._id){
+                    return <RecommendedCard key={e._id} video = {e}/>
+                }
+                
+            })}
+        
         </section>
         
-        {resComments && <Comments/>}
+        {resComments && <Comments videoId={video._id}/>}
         </section>
         </>
         // </main>

@@ -77,7 +77,7 @@ export default function SignupCard() {
       e.preventDefault()
       try {
         const googleResponse = await signInWithPopup(auth, provider);
-        console.log(googleResponse.user.photoURL)
+        console.log(googleResponse.user)
         dispatch(loginStart())
         const res = await axios.post('http://localhost:8000/api/auth/google', {
           name: googleResponse.user.displayName,

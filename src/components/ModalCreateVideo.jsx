@@ -1,9 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { getStorage, ref,uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import app from '../firebase.js'
+
 
 export default function ModalCreateVideo() {
 
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
+  const [img, setImg] = useState("");
+  const [video, setVideo] = useState("");
+  const [category, setCategory] = useState("");
+  const [tags, setTags] = useState([]);
+  const [imgProg, setImgProg] = useState(0);
+  const [videoProg, setVideoProg] = useState(0);
+  const [imgUrl, setImgUrl] = useState('');
+  const [videoUrl, setVideoUrl] = useState('')
 
-  function handleModal(e){
+
+
+  function handleModal(e) {
     e.preventDefault()
     document.getElementById('modal-video').classList.remove('modalAnimationDown')
     document.getElementById('modal-video').classList.add('modalAnimationUp')
@@ -12,38 +28,154 @@ export default function ModalCreateVideo() {
     document.getElementById('body').classList.remove('overflow-y-hidden')
     document.getElementById('modal-video').classList.remove('flex')
     document.getElementById('modal-video').classList.add('hidden')
+
+
   }
-  
+
+  function handleTags(e) {
+    let tag = e.target.value.split(',');
+    setTags(tag)
+    console.log(e.target.value)
+  }
+
+
+
+
+
+  const addVideo = async (e) => {
+    e.preventDefault()
+    const response = await axios({
+      method: 'post',
+      url: 'http://localhost:8000/api/video/addVideo',
+      headers: {
+        'Content-Type': 'application/json',
+        'access_token': localStorage.getItem('auth-token')
+      },
+      credentials: 'include',
+      data: {
+        title: title,
+        desc: desc,
+        imgUrl: imgUrl,
+        videoUrl: videoUrl,
+        category: category,
+        tags: tags
+      }
+    });
+    let data = await response.data;
+    console.log(data);
+  }
+
+  function fileUpload(file, type) {
+    //firebase
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + file.name
+    const storageRef = ref(storage, fileName);
+
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+
+    // Register three observers:
+    // 1. 'state_changed' observer, called any time the state changes
+    // 2. Error observer, called on failure
+    // 3. Completion observer, called on successful completion
+    uploadTask.on('state_changed',
+      (snapshot) => {
+        // Observe state change events such as progress, pause, and resume
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        // console.log('Upload is ' + progress + '% done');
+        type === 'imgUrl' ? setImgProg(Math.round(progress)) : setVideoProg(progress);
+        // console.log(imgProg)
+        switch (snapshot.state) {
+          case 'paused':
+            console.log('Upload is paused');
+            break;
+          case 'running':
+            console.log('Upload is running');
+            break;
+          default:
+            break;  
+        }
+      },
+      (error) => {
+        // Handle unsuccessful uploads
+        console.log(error)
+      },
+      () => {
+        // Handle successful uploads on complete
+        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log('File available at', downloadURL);
+          type === 'imgUrl' ? setImgUrl(downloadURL) : setVideoUrl(downloadURL)
+        });
+      }
+    );
+  }
+
+  useEffect(()=>{
+    img && fileUpload(img, "imgUrl")
+    console.log(imgUrl)
+  },[img])
+
+  useEffect(()=>{
+    video && fileUpload(video, "videoUrl")
+    console.log(videoUrl)
+  },[video])
+
+
+
+
 
   return (
     <section
       id="modal-video"
-      className="absolute hidden text-white w-1/4 justify-center items-start mx-auto  flex-col top-[-120vh] left-0 right-0 z-10 bg-bg-main rounded-2xl py-10 px-5"
+      className="absolute hidden text-white w-1/2 justify-center items-start mx-auto  flex-col top-[-120vh] left-0 right-0 z-10 bg-bg-main rounded-2xl py-10 px-36"
     >
-      <h2 className="text-2xl">Add a Video</h2>
-      <form className="flex flex-col gap-5 w-full">
+      <h2 className="text-6xl mx-auto">Add a Video</h2>
+      <form onSubmit={addVideo} className="flex flex-col gap-5 w-full mt-10">
         <div className="first-row flex gap-5">
-          <div className="flex flex-col">
+          <div className="flex flex-col w-full">
             <label htmlFor="title">Title</label>
             <input
-              className="bg-transparent border-gray-600 border rounded-md"
+              className="bg-transparent border-gray-600 border rounded-md w-full"
               type="text"
               id="title"
+              onChange={(e) => setTitle(e.target.value)}
+              value={title || ''}
+            />
+          </div>
+
+        </div>
+
+        <div className="first-row flex gap-5">
+          <div className="flex flex-col w-4/5">
+            <label htmlFor="tags">Tags</label>
+            <input
+              className="bg-transparent border-gray-600 border rounded-md w-full"
+              type="text"
+              id="tags"
+              placeholder="Seperate tags by comma"
+              onChange={handleTags}
+              value={tags}
             />
           </div>
           <div className="flex flex-col">
-            <label htmlFor="title">Tag</label>
+            <label htmlFor="category">Category</label>
             <select
               className="bg-slate-800 px-4 py-1 rounded-md"
-              name="tags"
-              id="tags"
+              name="category"
+              id="category"
+              onChange={(e) => setCategory(e.target.value)}
+              value={category || ''}
             >
-              <option value="">Select</option>
+              <option disabled value="">Select</option>
               <option value="games">Game</option>
               <option value="movie">Movie</option>
             </select>
           </div>
         </div>
+
+
 
         <div className="flex flex-col">
           <label htmlFor="description">Description</label>
@@ -51,9 +183,23 @@ export default function ModalCreateVideo() {
             className="bg-transparent border-gray-600 border rounded-md h-40"
             type="text"
             id="description"
+            onChange={(e) => setDesc(e.target.value)}
+            value={desc || ''}
           />
         </div>
 
+        <div className="block">
+          <label htmlFor="image">Choose Thumbnail</label>
+
+          
+          
+          {imgProg > 0 & imgProg <100 ? <p>Uploading {imgProg}% </p> : imgProg === 100 ? <><p>Upload successfully</p><button onClick={()=>{setImgUrl('');setImgProg(0)}}>Cancel</button></> :
+          <input onChange={(e) => setImg(e.target.files[0])} className="block" type="file" accept="image/*" id="image" />
+          }
+        </div>
+
+           {videoProg > 0 & videoProg <100 ? <p>Uploading {videoProg}% </p> : videoProg === 100 ? <><p>Upload successfully</p><button onClick={()=>{setVideoUrl('');setVideoProg(0)}}>Cancel</button></> :
+            
         <div className="flex items-center justify-center w-full">
           <label
             htmlFor="dropzone-file"
@@ -83,15 +229,16 @@ export default function ModalCreateVideo() {
                 SVG, PNG, JPG or GIF (MAX. 800x400px)
               </p>
             </div>
-            <input id="dropzone-file" type="file" className="hidden" />
+            <input onChange={(e) => setVideo(e.target.files[0])} id="dropzone-file" type="file" accept="video/*" className="hidden" />
           </label>
         </div>
+            }
 
         <div className="buttons flex justify-end gap-2">
-          <button className="border-blue-600 border border-solid rounded-md px-4 py-2 hover:bg-blue-700 hover:text-black">Create</button>
+          <button disabled={imgUrl==="" & videoUrl ===""} type="submit" className="border-blue-600 border border-solid rounded-md px-4 py-2 hover:bg-blue-700 hover:text-black">Create</button>
           <button onClick={handleModal} className="border-blue-600 border border-solid rounded-md px-4 py-2 hover:bg-blue-700 hover:text-black">Cancel</button>
         </div>
-       
+
       </form>
     </section>
   );

@@ -27,11 +27,11 @@ export default function Header() {
   }
 
   function handleNavBar(){
-    //toggling the display of both navbars
-    document.getElementById('nav').classList.toggle('hidden')
-    // document.getElementById('md-nav').classList.toggle('md\:flex')
-
-    document.getElementById('nav').classList.toggle('absolute')
+    let click = false;
+    const nav = document.getElementById('nav');
+    //toggling display
+    nav.classList.toggle('hidden')
+    nav.classList.toggle('absolute')
   }
 
   function handleModalVideo(){
@@ -41,7 +41,7 @@ export default function Header() {
     document.getElementById('modal-video').classList.add('modalAnimationDown')
     document.getElementById('main').classList.add('opacity-70')
     document.getElementById('header').classList.add('opacity-70')
-    document.getElementById('body').classList.add('overflow-y-hidden')
+    document.getElementById('body').classList.add('overflow-y-auto')
   }
   
 
@@ -56,7 +56,7 @@ export default function Header() {
   return (
     <>
     <ModalCreateVideo/>
-    <header id="header" className="h-16 bg-bg-main pb-4">
+    <header id="header" className="h-16 bg-bg-main pb-4 sticky top-0 z-10">
       <div className="header h-full w-[96vw] m-auto flex justify-between items-center text-white ">
         <div className={`bar ${!searchBox ? 'flex' : 'hidden'} items-center h-full`}>
           <img onClick={handleNavBar} src={bar} alt="" className={`w-6 xl:${hamburgerControll1(location.pathname)} hover:cursor-pointer`} />
