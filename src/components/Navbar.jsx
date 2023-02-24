@@ -85,7 +85,7 @@ export default function Navbar(props) {
         </>: 
           <div className="sign-in w-4/5 flex flex-col items-center gap-2">
             <p>Signin to like</p>
-            <Link to="signup" className="signin-button flex justify-around border-solid border-2 border-sky-500 py-2 px-2">
+            <Link to="/signup" className="signin-button flex justify-around border-solid border-2 border-sky-500 py-2 px-2">
               <img className="w-6" src={picpeople} alt="" />
               <h4>SIGN IN</h4>
             </Link>

@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import ModalCreateVideo from "./ModalCreateVideo";
 import {useSelector} from 'react-redux'
+import IconMenu from "./IconMenu";
 
 export default function Header() {
 
@@ -53,6 +54,11 @@ export default function Header() {
     }
   }
 
+  function handleIconMenu(){
+    const menu = document.getElementById('icon-menu')
+    menu.classList.toggle('hidden')
+  }
+
   return (
     <>
     <ModalCreateVideo/>
@@ -74,7 +80,8 @@ export default function Header() {
         <div className={`profile ${!searchBox ? 'flex' : 'hidden'} gap-5 h-full items-center`}>
             <img onClick={handleSearchDisplay} className="w-5 sm:hidden hover:cursor-pointer" src={searchIcon} alt="" />
             <img onClick={handleModalVideo} className="w-8 h-8 hover:cursor-pointer" src={video} alt="" />
-            <img className="w-8 h-8 rounded-full" src={currentUser.img} alt="" />
+            <img onClick={handleIconMenu} className="w-8 h-8 rounded-full hover:cursor-pointer" src={currentUser.img} alt="" />
+            <IconMenu/>
         </div>
         }
       </div>

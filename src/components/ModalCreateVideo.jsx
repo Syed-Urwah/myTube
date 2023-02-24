@@ -17,6 +17,53 @@ export default function ModalCreateVideo() {
   const [imgUrl, setImgUrl] = useState('');
   const [videoUrl, setVideoUrl] = useState('')
 
+  //convert plural into singular
+  function singularize(words) {
+    const singularRules = [
+      [/(quiz)zes$/i, "$1"],
+      [/^(ox)en/i, "$1"],
+      [/([m|l])ice$/i, "$1ouse"],
+      [/(matr|vert|ind)(ix|ices)$/i, "$1ix"],
+      [/(x|ch|ss|sh)es$/i, "$1"],
+      [/([^aeiouy]|qu)ies$/i, "$1y"],
+      [/(hive)s$/i, "$1"],
+      [/(?:([^f])fe|([lr])f)s$/i, "$1$2"],
+      [/sis$/i, "sis"],
+      [/([ti])a$/i, "$1um"],
+      [/(p)erson$/i, "$1eople"],
+      [/(m)an$/i, "$1en"],
+      [/(c)hild$/i, "$1hildren"],
+      [/(buffal|tomat)o$/i, "$1o"],
+      [/(bu)s$/i, "$1s"],
+      [/(alias|status)$/i, "$1"],
+      [/(octop|vir)us$/i, "$1us"],
+      [/(ax|test)is$/i, "$1is"],
+      [/s$/i, ""]
+    ];
+  
+    if (Array.isArray(words)) {
+      return words.map(word => {
+        for (let i = 0; i < singularRules.length; i++) {
+          const rule = singularRules[i];
+          if (rule[0].test(word)) {
+            return word.replace(rule[0], rule[1]);
+          }
+        }
+        return word;
+      });
+    }
+  
+    for (let i = 0; i < singularRules.length; i++) {
+      const rule = singularRules[i];
+      if (rule[0].test(words)) {
+        return words.replace(rule[0], rule[1]);
+      }
+    }
+  
+    return words;
+  }
+  
+  
 
 
   function handleModal(e) {
@@ -58,7 +105,7 @@ export default function ModalCreateVideo() {
         imgUrl: imgUrl,
         videoUrl: videoUrl,
         category: category,
-        tags: tags
+        tags: singularize(tags)
       }
     });
     let data = await response.data;
@@ -115,6 +162,7 @@ export default function ModalCreateVideo() {
   useEffect(()=>{
     img && fileUpload(img, "imgUrl")
     console.log(imgUrl)
+    console.log(singularize(tags))
   },[img])
 
   useEffect(()=>{
@@ -129,9 +177,9 @@ export default function ModalCreateVideo() {
   return (
     <section
       id="modal-video"
-      className="absolute hidden text-white w-1/2 justify-center items-start mx-auto  flex-col top-[-120vh] left-0 right-0 z-10 bg-bg-main rounded-2xl py-10 px-36"
+      className="absolute hidden text-white max-w-[750px] justify-center items-start mx-auto  flex-col top-[-120vh] left-0 right-0 z-20 bg-bg-main rounded-2xl py-10 px-2 md:px-32"
     >
-      <h2 className="text-6xl mx-auto">Add a Video</h2>
+      <h2 className="sm:text-6xl text-4xl mx-auto">Add a Video</h2>
       <form onSubmit={addVideo} className="flex flex-col gap-5 w-full mt-10">
         <div className="first-row flex gap-5">
           <div className="flex flex-col w-full">
@@ -147,7 +195,7 @@ export default function ModalCreateVideo() {
 
         </div>
 
-        <div className="first-row flex gap-5">
+        <div className="first-row flex gap-5 flex-wrap">
           <div className="flex flex-col w-4/5">
             <label htmlFor="tags">Tags</label>
             <input

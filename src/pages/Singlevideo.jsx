@@ -15,10 +15,12 @@ import ThumbUpOffAltOutlinedIcon from '@mui/icons-material/ThumbUpOffAltOutlined
 import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import PuffLoader from "react-spinners/PuffLoader";
 
 export default function SingleVideo() {
 
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState(true)
     const [resComments, setresComments] = useState(false)
     const [video , setVideo] = useState({});
     const [user , setUser] = useState({});
@@ -44,6 +46,7 @@ export default function SingleVideo() {
     //fetching video
     const fetchVideo = async () =>{
         try {
+            setLoading(true)
             const response = await axios.get(`http://localhost:8000/api/video/fetchVideo/${id}`)
             let data = await response.data
             setVideo(data);
@@ -86,13 +89,13 @@ export default function SingleVideo() {
             }else{
                 setDislike(false)
             }
+            setTimeout(()=>{
+                setLoading(false)
+            }, 500)
+            // setLoading(false)
         } catch (error) {
             console.log(error)
         }
-      
-    }
-
-    const fetchRecommendedVideos = async () =>{
       
     }
 
@@ -212,7 +215,7 @@ export default function SingleVideo() {
         increaseVideViews();
         fetchVideo();
         // console.log(currentUser.subscribedUsers.includes(user._id))
-        console.log(video)
+        console.log(recVideos.includes(catgVideos._id))
         
     },[id])
     
@@ -221,86 +224,92 @@ export default function SingleVideo() {
     // <main id='main' className='bg-bg-main'>
     <>
         {/* <Navbar display="hidden1" videoId={id}/> */}
-    <section className='xl:max-w-screen-2xl mx-auto text-white flex flex-col lg:flex-row gap-4'>
-        <section className="video-section xl:max-w-[70%] lg:max-w-[62%] flex flex-col lg:ml-4">
-            
-            <div className="video-wrapper w-full max-h-[600px]">
-                <video className='h-full' src={video.videoUrl} width="100%" controls/>
-            </div>
-                
-            <div className='flex flex-col gap-4'>
 
-            <h2 className='font-semibold text-2xl'>{video.title}</h2>
-
-            <div className="channel flex lg:flex-nowrap flex-wrap justify-between items-center w-full gap-2">
-
-                <div className="left flex items-center gap-5">
-                    <img className='w-12 h-12 rounded-full' src={user.img} alt="" />
-                    <div className='flex flex-col'>
-                        <h2 className='text-lg'>{user.name}</h2>
-                        <p className='text-[#aaaaaa]'>{user.subscribers} subscribers</p>
+        {loading ? <PuffLoader className='m-auto' color={"#FFFFFF"} loading={loading} size={100} aria-label="Loading Spinner" data-testid="loader"/>
+        : 
+            <section className='xl:max-w-screen-2xl mx-auto text-white flex flex-col lg:flex-row gap-4'>
+                <section className="video-section xl:max-w-[70%] lg:max-w-[62%] flex flex-col lg:ml-4"> 
+                    
+                    <div className="video-wrapper w-full max-h-[600px]">
+                        <video className='h-full' poster={video.imgUrl} loop src={video.videoUrl} width="100%" controls/>
                     </div>
-                    {!subscribe?<button onClick={handleSubscribe} className='border-solid bg-white text-black rounded-xl px-3 py-1 text-sm font-semibold'>Subscribe</button>
-                    :<button onClick={handleUnSubscribe} className='border-solid bg-[#2d2b2b] text-white rounded-xl px-3 py-1 text-sm font-semibold'>UnSubscribe</button>
-                }  
-                </div>
-
-                <div className="right flex gap-5 items-center">
-                    <div className="like-dislike flex items-center gap-4 gray-button">
-                        <button onClick={handleLike}>
-                        {!like ? <ThumbUpOffAltOutlinedIcon/>
-                        :<ThumbUpAltIcon/>
-                        }
-                        </button>
                         
-                        <p className='border-r-2 pr-2'>{video.likes === undefined ? "0" : video.likes.length}</p>
-                        <button onClick={handleDisLike}>
-                            {!dislike ? <ThumbDownAltOutlinedIcon/>
-                            :<ThumbDownAltIcon/>
-                            }
-                        </button>
+                    <div className='flex flex-col gap-4'>
+
+                    <h2 className='font-semibold text-2xl'>{video.title}</h2>
+
+                    <div className="channel flex lg:flex-nowrap flex-wrap justify-between items-center w-full gap-2">
+
+                        <div className="left flex items-center gap-5">
+                            <img className='w-12 h-12 rounded-full' src={user.img} alt="" />
+                            <div className='flex flex-col'>
+                                <h2 className='text-lg'>{user.name}</h2>
+                                <p className='text-[#aaaaaa]'>{user.subscribers} subscribers</p>
+                            </div>
+                            {!subscribe?<button onClick={handleSubscribe} className='border-solid bg-white text-black rounded-xl px-3 py-1 text-sm font-semibold'>Subscribe</button>
+                            :<button onClick={handleUnSubscribe} className='border-solid bg-[#2d2b2b] text-white rounded-xl px-3 py-1 text-sm font-semibold'>UnSubscribe</button>
+                        }  
+                        </div>
+
+                        <div className="right flex gap-5 items-center">
+                            <div className="like-dislike flex items-center gap-4 gray-button">
+                                <button onClick={handleLike}>
+                                {!like ? <ThumbUpOffAltOutlinedIcon/>
+                                :<ThumbUpAltIcon/>
+                                }
+                                </button>
+                                
+                                <p className='border-r-2 pr-2'>{video.likes === undefined ? "0" : video.likes.length}</p>
+                                <button onClick={handleDisLike}>
+                                    {!dislike ? <ThumbDownAltOutlinedIcon/>
+                                    :<ThumbDownAltIcon/>
+                                    }
+                                </button>
+                            </div>
+                            <div className="share flex gap-2 items-center gray-button">
+                                <img className='w-5 h-5' src={shareIcon} alt="" />
+                                <p>Share</p>
+                            </div>
+
+                            <div className="share flex gap-2 items-center gray-button">
+                                <img className='w-5 h-5' src={saveIcon} alt="" />
+                                <p>Save</p>
+                            </div>
+                        </div>
                     </div>
-                    <div className="share flex gap-2 items-center gray-button">
-                        <img className='w-5 h-5' src={shareIcon} alt="" />
-                        <p>Share</p>
+
+                    <div className="description bg-border-bg px-2 py-2 rounded-2xl w-full">
+                        <p>{video.views} views {format(video.createdAt)}</p>
+                        <p className='description'>{video.desc}</p>
                     </div>
 
-                    <div className="share flex gap-2 items-center gray-button">
-                        <img className='w-5 h-5' src={saveIcon} alt="" />
-                        <p>Save</p>
+                    {!resComments && <Comments videoId = {video._id}/>}
+
                     </div>
-                </div>
-            </div>
+                </section>
 
-            <div className="description bg-border-bg px-2 py-2 rounded-2xl w-full">
-                <p>{video.views} views {format(video.createdAt)}</p>
-                <p className='description'>{video.desc}</p>
-            </div>
+                <section className="flex flex-col lg:items-center items-start lg:w-2/5 gap-3 ml-4">
+                    {recVideos.map((e)=>{
+                        if(e._id !== video._id){
+                            return <RecommendedCard key={e._id} video = {e}/>
+                        }
+                        
+                    })}
 
-            {!resComments && <Comments videoId = {video._id}/>}
-
-            </div>
-        </section>
-
-        <section className="flex flex-col lg:items-center items-start lg:w-2/5 gap-3 ml-4">
-            {recVideos.map((e)=>{
-                if(e._id !== video._id){
-                    return <RecommendedCard key={e._id} video = {e}/>
-                }
+                    {catgVideos.map((e)=>{
+                        if(e._id !== video._id && recVideos.includes(e._id) === false){
+                            // return <RecommendedCard key={e._id} video = {e}/>
+                            console.log(recVideos.includes(catgVideos))
+                            console.log(e.title)
+                        }
+                        
+                    })}
                 
-            })}
-
-            {catgVideos.map((e)=>{
-                if(e._id !== video._id){
-                    return <RecommendedCard key={e._id} video = {e}/>
-                }
+                </section>
                 
-            })}
-        
-        </section>
-        
-        {resComments && <Comments videoId={video._id}/>}
-        </section>
+                {resComments && <Comments videoId={video._id}/>}
+            </section>
+        }
         </>
         // </main>
   )
