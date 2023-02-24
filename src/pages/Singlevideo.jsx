@@ -227,7 +227,7 @@ export default function SingleVideo() {
 
         {loading ? <PuffLoader className='m-auto' color={"#FFFFFF"} loading={loading} size={100} aria-label="Loading Spinner" data-testid="loader"/>
         : 
-            <section className='xl:max-w-screen-2xl mx-auto text-white flex flex-col lg:flex-row gap-4'>
+            <section className='xl:w-[95%] mx-auto text-white flex flex-col lg:flex-row gap-4'>
                 <section className="video-section xl:max-w-[70%] lg:max-w-[62%] flex flex-col lg:ml-4"> 
                     
                     <div className="video-wrapper w-full max-h-[600px]">

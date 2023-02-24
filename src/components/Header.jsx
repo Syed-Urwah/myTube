@@ -47,7 +47,7 @@ export default function Header() {
   
 
   function hamburgerControll1(path){
-    if(path !== "/" && path !== "/sub"){
+    if (path !== "/" && path !== "/sub" && path !== "/trend" && path !== "/movie" && path !== "/music" && path !== "/gaming" && path !== "/news" && path !== "/sports" ) {
       return "block"
     }else{
       return "hidden"

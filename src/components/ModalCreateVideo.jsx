@@ -131,7 +131,7 @@ export default function ModalCreateVideo() {
         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         // console.log('Upload is ' + progress + '% done');
-        type === 'imgUrl' ? setImgProg(Math.round(progress)) : setVideoProg(progress);
+        type === 'imgUrl' ? setImgProg(Math.round(progress)) : setVideoProg(Math.round(progress));
         // console.log(imgProg)
         switch (snapshot.state) {
           case 'paused':
@@ -219,6 +219,10 @@ export default function ModalCreateVideo() {
               <option disabled value="">Select</option>
               <option value="games">Game</option>
               <option value="movie">Movie</option>
+              <option value="music">Music</option>
+              <option value="gaming">Gaming</option>
+              <option value="news">News</option>
+              <option value="sports">Sports</option>
             </select>
           </div>
         </div>
@@ -283,7 +287,7 @@ export default function ModalCreateVideo() {
             }
 
         <div className="buttons flex justify-end gap-2">
-          <button disabled={imgUrl==="" & videoUrl ===""} type="submit" className="border-blue-600 border border-solid rounded-md px-4 py-2 hover:bg-blue-700 hover:text-black">Create</button>
+          <button disabled={imgUrl==='' || videoUrl ===''} type="submit" className="border-blue-600 border border-solid rounded-md px-4 py-2 hover:bg-blue-700 hover:text-black">Create</button>
           <button onClick={handleModal} className="border-blue-600 border border-solid rounded-md px-4 py-2 hover:bg-blue-700 hover:text-black">Cancel</button>
         </div>
 

@@ -7,33 +7,42 @@ import PuffLoader from "react-spinners/PuffLoader";
 import { useSelector } from "react-redux";
 
 
-export default function Vidoes(props) {
+export default function Vidoes({type,category}) {
 
   const [videos, setVideos] = useState([]);
   const [loading , setLoading] = useState(true)
   const {currentUser} = useSelector((state)=>state.user)
 
+  async function getVideos(){
+    setLoading(true);
+    if(!type){
+      const response = await axios.get(`http://localhost:8000/api/video/category?catg=${category}`)
+      setVideos(response.data);
+    
+    
+    }else{
+      const response = await axios.get(`http://localhost:8000/api/video/${type}`,{
+      headers:{
+        'access_token': localStorage.getItem('auth-token')
+      }
+    })
+      setVideos(response.data);
+      console.log(response)
+    }
+    //stop loading
+    setTimeout(()=>{
+      setLoading(false)
+    },500)
+  }
 
 
   useEffect(()=>{
     console.log(currentUser)
-    async function getVideos(){
-      setLoading(true);
-      const response = await axios.get(`http://localhost:8000/api/video/${props.type}`,{
-        headers:{
-          'access_token': localStorage.getItem('auth-token')
-        }
-      })
-      setVideos(response.data);
-      console.log(response)
-      setTimeout(()=>{
-        setLoading(false)
-      },500)
-    }
+    
     getVideos();
 
     console.log(Object.keys(videos).length)
-  },[props.type])
+  },[type])
 
 
   return (
