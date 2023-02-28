@@ -16,6 +16,8 @@ import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import PuffLoader from "react-spinners/PuffLoader";
+import LibraryAddOutlinedIcon from '@mui/icons-material/LibraryAddOutlined';
+import LibraryAddCheckIcon from '@mui/icons-material/LibraryAddCheck';
 
 export default function SingleVideo() {
 
@@ -27,9 +29,11 @@ export default function SingleVideo() {
     const [subscribe, setSubscribe] = useState(false);
     const [like, setLike] = useState(false)
     const [dislike, setDislike] =useState(false);
+    const [watchLater, setWatchLater] = useState(false);
     const [recVideos, setRecVideos] = useState([])
     const [catgVideos, setCatgVideos] = useState([])
     let {id} = useParams();
+    let params = useParams();
 
     const currentUser = useSelector(state => state.user.currentUser)
 
@@ -67,6 +71,8 @@ export default function SingleVideo() {
             setUser(res.data);
             console.log(res.data._id)
 
+            //updaing the history of user
+
             //checking the subscribtion
             if(currentUser.subscribedUsers.includes(res.data._id)){
                 setSubscribe(true)
@@ -89,6 +95,16 @@ export default function SingleVideo() {
             }else{
                 setDislike(false)
             }
+
+            //checking watchLater
+            if(currentUser.watchLater.includes(data._id)){
+                setWatchLater(true);
+                console.log("already watchLater")
+            }else{
+                setWatchLater(false);
+                console.log("not watchLater")
+            }
+            
             setTimeout(()=>{
                 setLoading(false)
             }, 500)
@@ -97,6 +113,17 @@ export default function SingleVideo() {
             console.log(error)
         }
       
+    }
+
+    const updatingHistory = async () =>{
+        const response = await axios({
+            method: 'put',
+            url: `http://localhost:8000/api/user/history/${id}`,
+            headers:{
+                'access_token': localStorage.getItem('auth-token')
+            }
+        })
+        console.log(response.data);
     }
 
     //increasing the video views by 1
@@ -199,6 +226,31 @@ export default function SingleVideo() {
         
     }
     
+    const handleWatchLater = async () =>{
+        const response = await axios({
+            method: 'put',
+            url: `http://localhost:8000/api/user/watch-later/${video._id}`,
+            headers: {
+                'access_token': localStorage.getItem('auth-token')
+            }, 
+            
+          });
+        console.log(response.data);
+        dispatch(loginSuccess(response.data));
+        if(watchLater){
+            setWatchLater(false)
+        }else{
+            setWatchLater(true);
+        }
+        console.log(currentUser);
+        
+    }
+
+    function handleShare(){
+        navigator.clipboard.writeText(window.location.href);
+        alert("Link Copied")
+        // console.log(window.location.href)
+    }
     
 
 
@@ -211,11 +263,14 @@ export default function SingleVideo() {
         window.onresize = browserWidth
         window.onload = browserWidth
         
+        console.log(currentUser)
         console.log(localStorage.getItem('auth-token'))
         increaseVideViews();
+        updatingHistory();
         fetchVideo();
         // console.log(currentUser.subscribedUsers.includes(user._id))
-        console.log(recVideos.includes(catgVideos._id))
+
+        
         
     },[id])
     
@@ -231,7 +286,7 @@ export default function SingleVideo() {
                 <section className="video-section xl:max-w-[70%] lg:max-w-[62%] flex flex-col lg:ml-4"> 
                     
                     <div className="video-wrapper w-full max-h-[600px]">
-                        <video className='h-full' poster={video.imgUrl} loop src={video.videoUrl} width="100%" controls/>
+                        <video id='video' className='h-full' poster={video.imgUrl} loop src={video.videoUrl} width="1080px" controls/>
                     </div>
                         
                     <div className='flex flex-col gap-4'>
@@ -266,13 +321,15 @@ export default function SingleVideo() {
                                     }
                                 </button>
                             </div>
-                            <div className="share flex gap-2 items-center gray-button">
+                            <div onClick={handleShare} className="share flex gap-2 items-center gray-button hover:cursor-pointer">
                                 <img className='w-5 h-5' src={shareIcon} alt="" />
                                 <p>Share</p>
                             </div>
 
-                            <div className="share flex gap-2 items-center gray-button">
-                                <img className='w-5 h-5' src={saveIcon} alt="" />
+
+                            <div onClick={handleWatchLater} className="share flex gap-2 items-center gray-button hover:cursor-pointer">
+                                {!watchLater ? <LibraryAddOutlinedIcon/> : <LibraryAddCheckIcon/>}
+                                {/* <img className='w-5 h-5' src={saveIcon} alt="" /> */}
                                 <p>Save</p>
                             </div>
                         </div>

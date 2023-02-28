@@ -29,7 +29,7 @@ export default function Navbar(props) {
 
 
   function navBarControll1(path) {
-    if (path !== "/" && path !== "/sub" && path !== "/trend" && path !== "/movie" && path !== "/music" && path !== "/gaming" && path !== "/news" && path !== "/sports" ) {
+    if (path !== "/" && path !== "/sub" && path !== "/trend" && path !== "/movie" && path !== "/music" && path !== "/gaming" && path !== "/news" && path !== "/sports" && path !== "/your-video" && path !== "/watch-later" && path !== "/history" ) {
       return "hidden"
     } else {
       return "xl:block"
@@ -67,21 +67,21 @@ export default function Navbar(props) {
           <div className="line border-t border-[#272727] mt-5"></div>
           {Object.keys(currentUser).length > 0 ?
             <>
-              <Link to="/" className="home w-[80%] flex h-10 ml-4 pl-3 items-center border-solid hover:bg-[#272727] rounded-xl ">
+              <Link to="/history" className="home w-[80%] flex h-10 ml-4 pl-3 items-center border-solid hover:bg-[#272727] rounded-xl ">
                 <div className="flex justify-center items-end h-1/2">
                   {/* <img className="w-6 h-6 mr-4" src={homeLogo} alt="" /> */}
                   <HistoryOutlinedIcon className="mr-4" />
                   <p>History</p>
                 </div>
               </Link>
-              <Link to="/" className="home w-[80%] flex h-10 ml-4 pl-3 items-center border-solid hover:bg-[#272727] rounded-xl ">
+              <Link to="/your-video" className="home w-[80%] flex h-10 ml-4 pl-3 items-center border-solid hover:bg-[#272727] rounded-xl ">
                 <div className="flex justify-center items-end h-1/2">
                   {/* <img className="w-6 h-6 mr-4" src={homeLogo} alt="" /> */}
                   <SlideshowOutlinedIcon className="mr-4" />
                   <p>Your Videos</p>
                 </div>
               </Link>
-              <Link to="/" className="home w-[80%] flex h-10 ml-4 pl-3 items-center border-solid hover:bg-[#272727] rounded-xl ">
+              <Link to="/watch-later" className="home w-[80%] flex h-10 ml-4 pl-3 items-center border-solid hover:bg-[#272727] rounded-xl ">
                 <div className="flex justify-center items-end h-1/2">
                   {/* <img className="w-6 h-6 mr-4" src={homeLogo} alt="" /> */}
                   <WatchLaterOutlinedIcon className="mr-4" />

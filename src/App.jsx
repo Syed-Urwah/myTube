@@ -12,6 +12,10 @@ import Gaming from "./pages/Gaming";
 import News from "./pages/News";
 import Sports from "./pages/Sports";
 import Movie from "./pages/Movie";
+import Test from "./pages/test";
+import YourVideo from "./pages/YourVideo";
+import WatchLater from "./pages/WatchLater";
+import History from "./pages/History";
 
 function App() {
   
@@ -33,6 +37,10 @@ function App() {
           <Route path="/news" element={<News/>}/>
           <Route path="/sports" element={<Sports/>}/>
           <Route path="/signup" element={<Signup/>}/>
+          <Route path="/your-video" element={<YourVideo/>}/>
+          <Route path="/watch-later" element={<WatchLater/>}/>
+          <Route path="/history" element={<History/>}/>
+          <Route path="/test" element={<Test/>}/>
       </Routes>
       </main>
       </div>

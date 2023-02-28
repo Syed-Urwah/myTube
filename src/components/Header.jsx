@@ -5,7 +5,7 @@ import video from '../assets/add-video.png'
 import profilePic from '../assets/profile.jpg'
 import searchIcon from '../assets/search.svg'
 import leftArrow from '../assets/arrow-left.svg'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import ModalCreateVideo from "./ModalCreateVideo";
 import {useSelector} from 'react-redux'
@@ -15,7 +15,9 @@ export default function Header() {
 
   const currentUser = useSelector(state=>state.user.currentUser)
   const [searchBox, setsearchBox] = useState(false)
+  const [searchValue, setSearchValue] = useState('');
   const location = useLocation()
+  const navigate = useNavigate()
 
   
 
@@ -25,6 +27,13 @@ export default function Header() {
     }else{
       setsearchBox(false)
     }
+  }
+
+  function handleSearch(e){
+    if(e.key === 'Enter'){
+      console.log(searchValue)
+    }
+    
   }
 
   function handleNavBar(){
@@ -47,7 +56,7 @@ export default function Header() {
   
 
   function hamburgerControll1(path){
-    if (path !== "/" && path !== "/sub" && path !== "/trend" && path !== "/movie" && path !== "/music" && path !== "/gaming" && path !== "/news" && path !== "/sports" ) {
+    if (path !== "/" && path !== "/sub" && path !== "/trend" && path !== "/movie" && path !== "/music" && path !== "/gaming" && path !== "/news" && path !== "/sports" && path !== "/your-video" && path !== "/watch-later" && path !== "/history" ) {
       return "block"
     }else{
       return "hidden"
@@ -57,6 +66,7 @@ export default function Header() {
   function handleIconMenu(){
     const menu = document.getElementById('icon-menu')
     menu.classList.toggle('hidden')
+    // navigate('/signup')
   }
 
   return (
@@ -73,7 +83,7 @@ export default function Header() {
 
         <div className={`search h-full flex items-center justify-evenly ${searchBox ? 'w-full' : 'w-auto'}`}>
             <img onClick={handleSearchDisplay} className={`w-5 hover:cursor-pointer ${searchBox ? 'block' : 'hidden'}`} src={leftArrow} alt="" />
-            <input className={`md:w-96 sm:w-60 sm:block w-4/5 ${searchBox ? 'block' : 'hidden'} h-10 rounded-full pl-2 text-white border-[#1c1c1c] outline-none border-solid border-2 bg-transparent focus:border-white`} autoFocus={searchBox} placeholder="Search" type="text" name="search" id="search-box" />
+            <input onKeyDown={handleSearch} onChange={(e)=>setSearchValue(e.target.value)} className={`md:w-96 sm:w-60 sm:block w-4/5 ${searchBox ? 'block' : 'hidden'} h-10 rounded-full pl-2 text-white border-[#1c1c1c] outline-none border-solid border-2 bg-transparent focus:border-white`} autoFocus={searchBox} placeholder="Search" type="text" name="search" id="search-box" />
         </div>
 
         {Object.keys(currentUser).length === 0 ? "login" : 

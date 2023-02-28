@@ -13,8 +13,14 @@ export default function SignupCard() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [error, setError] = useState('');
   const [user , setUser] = useState({
     email: "",
+    password: ""
+  })
+  const [signup, setSignup] = useState({
+    email: "",
+    name: "",
     password: ""
   })
   const [hover, sethover] = useState(false)
@@ -33,6 +39,18 @@ export default function SignupCard() {
     }
     
   }
+  //getting value of signup
+  function getValueSignUp(){
+    let email_value = document.getElementById('emailSignup').value;
+    let name_value = document.getElementById('nameSignup').value;
+    let password_value = document.getElementById('passwordSignup').value;
+    setSignup({
+      email: email_value,
+      name: name_value,
+      password: password_value
+    })
+    console.log(signup)
+  }
 
   //getting the input values
   function getValue(){
@@ -43,6 +61,26 @@ export default function SignupCard() {
       password: password_value
     })
     console.log(user)
+  }
+
+  //signup
+  const handleSignup = async (e) =>{
+    e.preventDefault();
+    try {
+      const response = await axios({
+        method: 'post',
+        url: "http://localhost:8000/api/auth/signup",
+        data: signup
+      })
+      console.log(response.data);
+      setSignup("")
+      alert("Now login")
+    } catch (err) {
+      console.log(err.response.data.message)
+      setError(err.response.data.message)
+      alert(error)
+    }
+    
   }
 
   //login
@@ -107,11 +145,11 @@ export default function SignupCard() {
             </button>
             <hr className='border-y-white border-solid w-72 border-[0.5px]' />
             <div className="inputs flex flex-col gap-3">
-              <input className='border-2 border-solid border-[#30303d] rounded-xl w-80 py-2 bg-inherit placeholder-white' type="email" placeholder='    Email' id='emailSignup'/>
-              <input className='border-2 border-solid border-[#30303d] rounded-xl w-80 py-2 bg-inherit placeholder-white' placeholder='   Name' type="text" name="nameSignup" id="nameSignUp" />
-              <input className='border-2 border-solid border-[#30303d] rounded-xl w-80 py-2 bg-inherit placeholder-white' placeholder='   Password' type="password" name="passwordSignup" id="passwordSignup" />
+              <input onChange={getValueSignUp} className='border-2 border-solid border-[#30303d] rounded-xl w-80 py-2 bg-inherit placeholder-white' type="email" placeholder='    Email' id='emailSignup'/>
+              <input onChange={getValueSignUp} className='border-2 border-solid border-[#30303d] rounded-xl w-80 py-2 bg-inherit placeholder-white' placeholder='   Name' type="text" name="nameSignup" id="nameSignup" />
+              <input onChange={getValueSignUp} className='border-2 border-solid border-[#30303d] rounded-xl w-80 py-2 bg-inherit placeholder-white' placeholder='   Password' type="password" name="passwordSignup" id="passwordSignup" />
             </div>
-            <button className='border-2 border-solid border-[#30303d] rounded-xl py-2 gap-4 w-80 justify-center text-[#30303d] hover:text-white bg-yellow-400 hover:bg-red-600'>SignUp</button>
+            <button onClick={handleSignup} className='border-2 border-solid border-[#30303d] rounded-xl py-2 gap-4 w-80 justify-center text-[#30303d] hover:text-white bg-yellow-400 hover:bg-red-600'>SignUp</button>
             <p>or</p>
             <h2 className='text-4xl font-semibold'>Sign In</h2>
             <div className="inputs flex flex-col gap-3">

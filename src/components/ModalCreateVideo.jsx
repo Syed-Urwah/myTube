@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { getStorage, ref,uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import app from '../firebase.js'
@@ -16,6 +16,7 @@ export default function ModalCreateVideo() {
   const [videoProg, setVideoProg] = useState(0);
   const [imgUrl, setImgUrl] = useState('');
   const [videoUrl, setVideoUrl] = useState('')
+
 
   //convert plural into singular
   function singularize(words) {
@@ -76,7 +77,6 @@ export default function ModalCreateVideo() {
     document.getElementById('modal-video').classList.remove('flex')
     document.getElementById('modal-video').classList.add('hidden')
 
-
   }
 
   function handleTags(e) {
@@ -110,6 +110,8 @@ export default function ModalCreateVideo() {
     });
     let data = await response.data;
     console.log(data);
+    setTitle(""); setDesc(""); setCategory(""); setImgUrl(""); setVideoUrl(""); setImgProg(0); setVideoProg(0);
+    handleModal(e)
   }
 
   function fileUpload(file, type) {
@@ -131,7 +133,7 @@ export default function ModalCreateVideo() {
         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         // console.log('Upload is ' + progress + '% done');
-        type === 'imgUrl' ? setImgProg(Math.round(progress)) : setVideoProg(Math.round(progress));
+        type === 'imgUrl' ? setImgProg(Math.round(progress-5)) : setVideoProg(Math.round(progress-5));
         // console.log(imgProg)
         switch (snapshot.state) {
           case 'paused':
@@ -154,9 +156,11 @@ export default function ModalCreateVideo() {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           console.log('File available at', downloadURL);
           type === 'imgUrl' ? setImgUrl(downloadURL) : setVideoUrl(downloadURL)
+          type === 'imgUrl' ? setImgProg(100) : setVideoProg(100);
         });
       }
     );
+    
   }
 
   useEffect(()=>{
@@ -171,7 +175,7 @@ export default function ModalCreateVideo() {
   },[video])
 
 
-
+  
 
 
   return (
@@ -217,7 +221,6 @@ export default function ModalCreateVideo() {
               value={category || ''}
             >
               <option disabled value="">Select</option>
-              <option value="games">Game</option>
               <option value="movie">Movie</option>
               <option value="music">Music</option>
               <option value="gaming">Gaming</option>

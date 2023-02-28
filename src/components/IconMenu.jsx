@@ -13,15 +13,18 @@ import Cloud from '@mui/icons-material/Cloud';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginSuccess } from '../redux/user/CurrentUserSlice';
+import { useNavigate } from 'react-router-dom';
 
 export default function IconMenu() {
 
   const {currentUser} = useSelector((state)=>state.user)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   function handleLogOut(){
     dispatch(loginSuccess(""))
     localStorage.setItem('auth-token', "")
+    navigate('/signup')
   }
 
   return (
