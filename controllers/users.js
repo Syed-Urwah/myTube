@@ -160,3 +160,47 @@ export const dislikeVideo = async (req, res, next) => {
     }
 }
 
+//watchLater
+export const watchLater = async (req,res,next) =>{
+
+    try {
+        const user1 = await User.findById(req.user.id);
+    let watch = false;
+
+    user1.watchLater.map((e)=>{
+        if(e === req.params.videoId){
+            watch = true
+        }
+    })
+    if(!watch){
+        const user = await User.findByIdAndUpdate(req.user.id, {
+        $push: {watchLater: req.params.videoId}
+    },{new: true})
+    res.status(200).json(user)
+
+    }else{
+        const user = await User.findByIdAndUpdate(req.user.id, {
+        $pull: {watchLater: req.params.videoId}
+    },{new: true})
+    res.status(200).json(user)
+    }
+    } catch (error) {
+        next(error)
+    }
+
+    
+
+    
+}
+
+//add videoId in the history array of user
+export const addHistory = async (req,res,next) =>{
+    const user = await User.findById(req.user.id);
+        const user1 = await User.findByIdAndUpdate(req.user.id,{
+            // $pull: {history: req.params.videoId},
+            $addToSet: {history: req.params.videoId}
+        }, {new: true});
+        res.status(200).json(user1)
+    
+}
+

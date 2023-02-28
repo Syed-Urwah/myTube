@@ -84,6 +84,46 @@ export const sub = async (req,res,next) =>{
     }    
 }
 
+//History videos
+export const history = async (req,res,next) =>{
+
+    try {
+        const user = await User.findById(req.user.id);
+    const history = user.history;
+
+    const historyList = Promise.all(
+        history.map((e)=>{
+            return Video.findById(e)
+        })
+    )
+    res.status(200).json(await historyList)
+    } catch (error) {
+        next(error)
+    }
+
+    
+}
+
+//watch Later videos
+export const watchLater = async (req,res,next) =>{
+
+    try {
+        const user = await User.findById(req.user.id);
+        const watchLater = user.watchLater;
+
+        const watchLaterList = Promise.all(
+            watchLater.map((e)=>{
+                return Video.findById(e);
+        })
+    )
+        res.status(200).json(await watchLaterList);
+    } catch (error) {
+        next(error);
+    }
+
+    
+}
+
 //trend videos
 export const trend = async (req,res,next) =>{
     try {
@@ -159,5 +199,16 @@ export const videoViews = async (req,res,next)=>{
     }
 
     
+
+}
+
+//get video byUserId
+export const videoByUserId = async (req,res,next) =>{
+    try {
+        const video = await Video.find({userId: req.params.userId})
+        res.status(200).json(video);
+    } catch (error) {
+        next(error)
+    }
 
 }
