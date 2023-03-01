@@ -8,7 +8,8 @@ import leftArrow from '../assets/arrow-left.svg'
 import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import ModalCreateVideo from "./ModalCreateVideo";
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
+import { videoQuery } from "../redux/user/CurrentUserSlice";
 import IconMenu from "./IconMenu";
 
 export default function Header() {
@@ -18,6 +19,7 @@ export default function Header() {
   const [searchValue, setSearchValue] = useState('');
   const location = useLocation()
   const navigate = useNavigate()
+  const dispatch = useDispatch();
 
   
 
@@ -30,8 +32,10 @@ export default function Header() {
   }
 
   function handleSearch(e){
+    dispatch(videoQuery(searchValue));
     if(e.key === 'Enter'){
       console.log(searchValue)
+      navigate('/search')
     }
     
   }
@@ -56,7 +60,7 @@ export default function Header() {
   
 
   function hamburgerControll1(path){
-    if (path !== "/" && path !== "/sub" && path !== "/trend" && path !== "/movie" && path !== "/music" && path !== "/gaming" && path !== "/news" && path !== "/sports" && path !== "/your-video" && path !== "/watch-later" && path !== "/history" ) {
+    if (path !== "/" && path !== "/sub" && path !== "/trend" && path !== "/movie" && path !== "/music" && path !== "/gaming" && path !== "/news" && path !== "/sports" && path !== "/your-video" && path !== "/watch-later" && path !== "/history" && path !== "/search" ) {
       return "block"
     }else{
       return "hidden"

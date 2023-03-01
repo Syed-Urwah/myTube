@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   currentUser: {},
   loading: false,
-  error: ""
+  error: "",
+  query:""
 }
 
 export const CurrentUserSlice = createSlice({
@@ -20,11 +21,14 @@ export const CurrentUserSlice = createSlice({
     loginFailed: (state, action)=>{
         state.loading = false;
         state.error = action.payload
+    },
+    videoQuery:(state,action)=>{
+      state.query = action.payload
     }
   }
     
 })
 
 // Action creators are generated for each case reducer function
-export const { loginStart, loginSuccess, loginFailed } = CurrentUserSlice.actions
+export const { loginStart, loginSuccess, loginFailed, videoQuery } = CurrentUserSlice.actions
 export default CurrentUserSlice.reducer

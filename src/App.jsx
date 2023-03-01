@@ -16,6 +16,7 @@ import Test from "./pages/test";
 import YourVideo from "./pages/YourVideo";
 import WatchLater from "./pages/WatchLater";
 import History from "./pages/History";
+import Search from "./pages/Search";
 
 function App() {
   
@@ -40,6 +41,7 @@ function App() {
           <Route path="/your-video" element={<YourVideo/>}/>
           <Route path="/watch-later" element={<WatchLater/>}/>
           <Route path="/history" element={<History/>}/>
+          <Route path="/search" element={<Search/>}/>
           <Route path="/test" element={<Test/>}/>
       </Routes>
       </main>

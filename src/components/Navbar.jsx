@@ -29,7 +29,7 @@ export default function Navbar(props) {
 
 
   function navBarControll1(path) {
-    if (path !== "/" && path !== "/sub" && path !== "/trend" && path !== "/movie" && path !== "/music" && path !== "/gaming" && path !== "/news" && path !== "/sports" && path !== "/your-video" && path !== "/watch-later" && path !== "/history" ) {
+    if (path !== "/" && path !== "/sub" && path !== "/trend" && path !== "/movie" && path !== "/music" && path !== "/gaming" && path !== "/news" && path !== "/sports" && path !== "/your-video" && path !== "/watch-later" && path !== "/history" && path !== "/search" ) {
       return "hidden"
     } else {
       return "xl:block"

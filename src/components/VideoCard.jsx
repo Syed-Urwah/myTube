@@ -27,7 +27,7 @@ export default function VideoCard({data}) {
 
   return (
     <Link to={`/video/${data._id}`} className="video flex flex-col">
-      <img className="lazyload w-96 mb-3 rounded-2xl h-60 hover:opacity-30 object-cover"src={data.imgUrl} alt="" />
+      <img className="lazyload w-96 mb-3 rounded-2xl h-60 hover:opacity-30 object-cover bg-gray-800"src={data.imgUrl} alt="" />
       <div className="video-details flex">
         <img className="rounded-full w-12 h-12" src={channel.img} alt="" />
         <div className="details pl-5">
