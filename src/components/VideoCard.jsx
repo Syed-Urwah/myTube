@@ -1,22 +1,34 @@
 import React, { useEffect, useState } from "react";
 import thumbnail from "../assets/thumbnail.jpg";
 import channelPic from '../assets/channel.jpg';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {format} from 'timeago.js'
 import axios from 'axios'
 import th from '../assets/placeholder-thumbnail.png'
 import 'lazysizes';
 import 'lazysizes/plugins/parent-fit/ls.parent-fit';
+import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import eidt from '../assets/edit.png'
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+
+
 
 export default function VideoCard({data}) {
 
   const [channel, setChannel] = useState({})
+  const location = useLocation();
 
     
   async function fetchChannel(){
     const res = await axios.get(`http://localhost:8000/api/user/find/${data.userId}`);
     setChannel(res.data)
     console.log(res.data)
+  }
+
+  function handleMore(e){
+    e.preventDefault();
+    document.getElementById(`more-menu-${data._id}`).classList.toggle('hidden')
   }
 
   useEffect(()=>{
@@ -26,16 +38,28 @@ export default function VideoCard({data}) {
 
 
   return (
-    <Link to={`/video/${data._id}`} className="video flex flex-col">
+    <>
+    <Link to={`/video/${data._id}`} className="video flex flex-col relative">
       <img className="lazyload w-96 mb-3 rounded-2xl h-60 hover:opacity-30 object-cover bg-gray-800"src={data.imgUrl} alt="" />
-      <div className="video-details flex">
+      <div className="video-details flex justify-between">
+        <div className="flex">
         <img className="rounded-full w-12 h-12" src={channel.img} alt="" />
         <div className="details pl-5">
           <h2 className="video-title text-white">{data.title}</h2>
           <p className="channel text-[#aaaaaa] capitalize">{channel.name}</p>
           <p className="views text-[#aaaaaa]">{data.views} views . {format(data.createdAt)}</p>
         </div>
+        </div>
+        {location.pathname === '/your-video' && 
+        <div className="edit-delete flex gap-2">
+          <EditOutlinedIcon onClick={handleMore}/>
+          <DeleteOutlineOutlinedIcon/>
+        </div>
+        }
+        
+        
       </div>
     </Link>
+    </>
   );
 }
