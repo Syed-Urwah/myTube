@@ -39,13 +39,6 @@ export default function IconMenu() {
             ⌘X
           </Typography>
         </MenuItem>
-        <Divider />
-        <MenuItem>
-          <ListItemIcon>
-            <Cloud fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>Web Clipboard</ListItemText>
-        </MenuItem>
       </MenuList>
     </Paper>
   );

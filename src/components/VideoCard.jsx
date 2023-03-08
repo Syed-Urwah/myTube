@@ -14,9 +14,10 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 
 
 
-export default function VideoCard({data}) {
+export default function VideoCard({data, setEdit}) {
 
   const [channel, setChannel] = useState({})
+  const [video, setVideo] = useState(false);
   const location = useLocation();
 
     
@@ -26,15 +27,29 @@ export default function VideoCard({data}) {
     console.log(res.data)
   }
 
-  function handleMore(e){
+  const handleDelete = async (e) =>{
     e.preventDefault();
-    document.getElementById(`more-menu-${data._id}`).classList.toggle('hidden')
+    try {
+      const response = await axios({
+        method: 'delete',
+        url: `http://localhost:8000/api/video/delete/${data._id}`,
+        headers:{
+          'access_token': localStorage.getItem('auth-token')
+        }
+      });
+      console.log(response.data);
+      // setVideo(response.data);
+      setEdit(true);
+    } catch (error) {
+      console.log(error)
+    }
+    
   }
 
   useEffect(()=>{
   
     fetchChannel()
-  },[])
+  },[video])
 
 
   return (
@@ -45,15 +60,15 @@ export default function VideoCard({data}) {
         <div className="flex">
         <img className="rounded-full w-12 h-12" src={channel.img} alt="" />
         <div className="details pl-5">
-          <h2 className="video-title text-white">{data.title}</h2>
+          <h2 className="video-title text-white">{data.title.slice(0,30) + '...'}</h2>
           <p className="channel text-[#aaaaaa] capitalize">{channel.name}</p>
           <p className="views text-[#aaaaaa]">{data.views} views . {format(data.createdAt)}</p>
         </div>
         </div>
         {location.pathname === '/your-video' && 
         <div className="edit-delete flex gap-2">
-          <EditOutlinedIcon onClick={handleMore}/>
-          <DeleteOutlineOutlinedIcon/>
+          <Link to={`/editVideo/${data._id}`}><EditOutlinedIcon/></Link>
+          <DeleteOutlineOutlinedIcon onClick={handleDelete}/>
         </div>
         }
         

@@ -52,7 +52,7 @@ export default function Vidoes({type,category}) {
       Object.keys(currentUser).length !== 0 ? 
       Object.keys(videos).length !== 0 ? videos.map((e)=>{
         return <VideoCard key={e._id} data={e}/>
-      }): "Kindly Subscribed any Channel to see their videos"
+      }): <h2 className="text-white m-auto">Kindly Subscribed any Channel to see their videos</h2>
       : "login to see subscribed videos"
       
       }

@@ -12,11 +12,12 @@ import Gaming from "./pages/Gaming";
 import News from "./pages/News";
 import Sports from "./pages/Sports";
 import Movie from "./pages/Movie";
-import Test from "./pages/test";
 import YourVideo from "./pages/YourVideo";
 import WatchLater from "./pages/WatchLater";
 import History from "./pages/History";
 import Search from "./pages/Search";
+import EditVideo from "./pages/EditVideo";
+import CreateVideo from "./pages/CreateVideo";
 
 function App() {
   
@@ -28,7 +29,7 @@ function App() {
        <Navbar/>
       
       <Routes>
-          <Route exact path="/" index element={<Home />}/>
+          <Route exact path="/" index element={<Home/>}/>
           <Route path="/video/:id" element={<Singlevideo />} />
           <Route path="/sub" element={<Subscribe/>}/>
           <Route path="/trend" element={<Trend/>}/>
@@ -42,7 +43,8 @@ function App() {
           <Route path="/watch-later" element={<WatchLater/>}/>
           <Route path="/history" element={<History/>}/>
           <Route path="/search" element={<Search/>}/>
-          <Route path="/test" element={<Test/>}/>
+          <Route path="/createVideo" element={<CreateVideo/>}/>
+          <Route path="/editVideo/:id" element={<EditVideo/>}/>
       </Routes>
       </main>
       </div>

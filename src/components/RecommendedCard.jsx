@@ -21,7 +21,7 @@ export default function RecommendedCard({video}) {
   return (
     
       <Link to={`/video/${video._id}`} className="flex justify-center gap-2">
-        <img className="w-44 rounded-2xl" src={video.imgUrl} alt="" />
+        <img className="w-44 h-32 object-cover rounded-2xl" src={video.imgUrl} alt="" />
         <div className="details flex flex-col gap-1">
           <h2 className="video-title text-white">{video.title}</h2>
           <p className="channel text-[#aaaaaa]">{user.name}</p>

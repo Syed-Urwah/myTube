@@ -22,7 +22,7 @@ export default function HorizontalVideoCard({data}) {
     },[])
   return (
         <Link to={`/video/${data._id}`} className='flex gap-4 w-3/4'>
-            <img className='w-96 mb-3 rounded-2xl h-60 hover:opacity-30 object-cover' src={data.imgUrl} alt="thumbnail" />
+            <img className='lg:w-96 sm:w-72 sm:h-44 h-1/2 w-44 mb-3 rounded-2xl lg:h-60 hover:opacity-30 object-cover' src={data.imgUrl} alt="thumbnail" />
             <div className="video-details flex flex-col gap-2">
                 <div>
                 <h2 className="video-title text-white text-xl">{data.title}</h2>

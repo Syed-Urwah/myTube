@@ -31,6 +31,7 @@ export default function History() {
       {loading ? <PuffLoader className="m-auto" color={"#FFFFFF"} loading={loading} size={100} aria-label="Loading Spinner" data-testid="loader"/> : 
     Object.keys(videos).length === 0 ? <h2 className='text-white m-auto'>You didn't create any video yet</h2> : 
     videos.map((e)=>{
+      if(e !== null)
         return <VideoCard key={e._id} data={e}/>
     })
     }

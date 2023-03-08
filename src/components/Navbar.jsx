@@ -46,7 +46,7 @@ export default function Navbar(props) {
 
   return (
     <>
-      <section id="nav" className={`${navBarControll1(location.pathname)} hidden pt-3 w-72 min-h-[calc(100vh-64px)] bg-bg-main text-white slide-in-left`}>
+      <section id="nav" className={`${navBarControll1(location.pathname)} hidden pt-3 w-72 min-h-[calc(100vh-64px)] bg-bg-main text-white slide-in-left z-50`}>
         <div className="s w-full flex flex-col justify-center sticky top-20">
 
           <Link to="/" className="home w-[80%] flex h-10 ml-4 pl-3 items-center border-solid hover:bg-[#272727] rounded-xl ">
@@ -157,7 +157,7 @@ export default function Navbar(props) {
         </div>
       </section>
 
-      {location.pathname === '/' && <MdNavbar />}
+      {/* {location.pathname === '/' && <MdNavbar />} */}
     </>
   );
 }

@@ -217,7 +217,8 @@ export default function SingleVideo() {
         //if user didnt dislike before
         if(!dislike){
               setLike(false);
-              setDislike(true)
+              setDislike(true);
+              video.likes.length--
         }else{
             setDislike(false)
         }
@@ -283,10 +284,10 @@ export default function SingleVideo() {
         {loading ? <PuffLoader className='m-auto' color={"#FFFFFF"} loading={loading} size={100} aria-label="Loading Spinner" data-testid="loader"/>
         : 
             <section className='xl:w-[95%] mx-auto text-white flex flex-col lg:flex-row gap-4'>
-                <section className="video-section xl:max-w-[70%] lg:max-w-[62%] flex flex-col lg:ml-4"> 
+                <section className="video-section xl:w-[70%] lg:w-[62%] flex flex-col lg:ml-4"> 
                     
                     <div className="video-wrapper w-full max-h-[600px]">
-                        <video id='video' className='h-full' poster={video.imgUrl} loop src={video.videoUrl} width="1080px" controls/>
+                        <video id='video' className='h-full w-full bg-gray-900' poster={video.imgUrl} loop src={video.videoUrl} width="1080px" controls/>
                     </div>
                         
                     <div className='flex flex-col gap-4'>

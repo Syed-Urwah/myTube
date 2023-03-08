@@ -1,5 +1,5 @@
 import React,{useState} from "react";
-import logo from "../assets/Youtube-Logo.wine.svg";
+import logo from "../assets/YouTube-Logo.wine.svg";
 import bar from "../assets/hamburgerDark.png";
 import video from '../assets/add-video.png'
 import profilePic from '../assets/profile.jpg'
@@ -32,8 +32,8 @@ export default function Header() {
   }
 
   function handleSearch(e){
-    dispatch(videoQuery(searchValue));
     if(e.key === 'Enter'){
+      dispatch(videoQuery(searchValue));
       console.log(searchValue)
       navigate('/search')
     }
@@ -75,7 +75,7 @@ export default function Header() {
 
   return (
     <>
-    <ModalCreateVideo/>
+    {/* <ModalCreateVideo/> */}
     <header id="header" className="h-16 bg-bg-main pb-4 sticky top-0 z-10">
       <div className="header h-full w-[96vw] m-auto flex justify-between items-center text-white ">
         <div className={`bar ${!searchBox ? 'flex' : 'hidden'} items-center h-full`}>
@@ -93,7 +93,9 @@ export default function Header() {
         {Object.keys(currentUser).length === 0 ? "login" : 
         <div className={`profile ${!searchBox ? 'flex' : 'hidden'} gap-5 h-full items-center`}>
             <img onClick={handleSearchDisplay} className="w-5 sm:hidden hover:cursor-pointer" src={searchIcon} alt="" />
-            <img onClick={handleModalVideo} className="w-8 h-8 hover:cursor-pointer" src={video} alt="" />
+            <Link to='/createVideo'>
+              <img onClick={handleModalVideo} className="w-8 h-8 hover:cursor-pointer" src={video} alt="" />
+            </Link>
             <img onClick={handleIconMenu} className="w-8 h-8 rounded-full hover:cursor-pointer" src={currentUser.img} alt="" />
             <IconMenu/>
         </div>

@@ -10,6 +10,7 @@ export default function YourVideo() {
 
     const [videos, setVideos] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [edit , setEdit] = useState(false);
 
     const fetchVideos = async () =>{
         setLoading(true);
@@ -22,7 +23,7 @@ export default function YourVideo() {
     useEffect(()=>{
         fetchVideos()
         console.log(currentUser)
-    },[])
+    },[edit])
 
 
   return (
@@ -31,7 +32,7 @@ export default function YourVideo() {
       {loading ? <PuffLoader className="m-auto" color={"#FFFFFF"} loading={loading} size={100} aria-label="Loading Spinner" data-testid="loader"/> : 
     Object.keys(videos).length === 0 ? <h2 className='text-white m-auto'>You didn't create any video yet</h2> : 
     videos.map((e)=>{
-        return <VideoCard key={e._id} data={e}/>
+        return <VideoCard key={e._id} data={e} setEdit={setEdit}/>
     })
     }
     </section>

@@ -20,7 +20,7 @@ export default function WatchLater() {
                 }
             });
             setVideos(response.data);
-            console.log(response.data)
+            console.log(response)
         } catch (error) {
             console.log(error)
         }
@@ -30,13 +30,15 @@ export default function WatchLater() {
 
     useEffect(()=>{
         fetchVideos()
+        console.log(Object.keys(videos).length);
     },[])
 
   return (
     <section className="w-screen bg-bg-main flex justify-center gap-4 flex-wrap pt-10 text-white">
         {loading ? <PuffLoader className="m-auto" color={"#FFFFFF"} loading={loading} size={100} aria-label="Loading Spinner" data-testid="loader"/> : 
-        Object.keys(videos).length === 0 ? <h2 className='text-white m-auto'>You didn't create any video yet</h2> : 
+        Object.keys(videos).length === 0 ? <h2 className='text-white m-auto'>No video saved in watchLater</h2> : 
         videos.map((e)=>{
+            if(e !== null)
         return <VideoCard key={e._id} data={e}/>
         })
         }
