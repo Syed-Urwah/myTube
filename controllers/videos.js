@@ -41,11 +41,14 @@ export const updateVideo = async (req,res,next) =>{
 //delete video
 export const deleteVideo = async (req,res,next) =>{
     try {
+        let success = false;
         const video = await Video.findById(req.params.id);
 
         if(video.userId === req.user.id){
+            success = true;
             await Video.findByIdAndDelete(req.params.id)
-            res.status(200).send("Video has been deleted")
+            
+            res.status(200).json(success)
         }else{
             res.status(400).send("Your only allowed to delete your video")
         }
