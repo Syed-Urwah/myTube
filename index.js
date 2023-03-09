@@ -7,6 +7,10 @@ import videoRoute from './routes/video.js'
 import commentRoute from './routes/comment.js'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
+import path from 'path';
+
+const __dirname = path.resolve();
+
 
 const dotenvConfig = dotenv.config();
 
@@ -16,10 +20,6 @@ const app = express()
 mongoose.set('strictQuery', true);
 mongoose.connect(process.env.MONGO_STRING, ()=>{
     console.log("connected to mongoDb")
-})
-
-app.get("/" , (req,res)=>{
-    res.send("hello")
 })
 
 //middle-wares
@@ -41,6 +41,18 @@ app.use((err,req,res,next)=>{
         message
     })
 })
+
+//to connect backend with the frontend build version
+app.use(express.static(path.join(__dirname, "../client/dist")));
+app.get("*", function (_, res) {
+  res.sendFile(
+    path.join(__dirname, "../client/dist/index.html"),
+    function (err) {
+      res.status(500).send(err);
+    }
+  );
+});
+
 
 
 app.listen("8000",()=>{
