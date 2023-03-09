@@ -25,7 +25,7 @@ export default function HorizontalVideoCard({data}) {
             <img className='lg:w-96 sm:w-72 sm:h-44 h-1/2 w-44 mb-3 rounded-2xl lg:h-60 hover:opacity-30 object-cover' src={data.imgUrl} alt="thumbnail" />
             <div className="video-details flex flex-col gap-2">
                 <div>
-                <h2 className="video-title text-white text-xl">{data.title.slice(0,10)}</h2>
+                <h2 className="video-title text-white text-xl">{data.title.slice(0,50)}</h2>
                 <p className="views text-[#aaaaaa]">{data.views} views . {format(data.createdAt)}</p>
                 </div>
                 <div className="channel flex items-center gap-2">
