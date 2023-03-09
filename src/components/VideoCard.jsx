@@ -22,7 +22,7 @@ export default function VideoCard({data, setEdit}) {
 
     
   async function fetchChannel(){
-    const res = await axios.get(`http://localhost:8000/api/user/find/${data.userId}`);
+    const res = await axios.get(`https://my-tube-server-git-master-syed-urwah.vercel.app/api/user/find/${data.userId}`);
     setChannel(res.data)
     console.log(res.data)
   }
