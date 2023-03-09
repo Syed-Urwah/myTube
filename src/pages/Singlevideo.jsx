@@ -218,7 +218,7 @@ export default function SingleVideo() {
         if(!dislike){
               setLike(false);
               setDislike(true);
-              video.likes.length--
+               like && video.likes.length--
         }else{
             setDislike(false)
         }
