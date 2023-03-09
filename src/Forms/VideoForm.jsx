@@ -114,7 +114,10 @@ export default function VideoForm(props) {
 
     const addVideo = async (e) => {
         e.preventDefault()
-        //add video
+        if(videoUrl === '' || imgUrl === ''){
+            alert("please complete the form first")
+        }else{
+            //add video
         if (location.pathname === '/createVideo') {
             const response = await axios({
                 method: 'post',
@@ -160,6 +163,8 @@ export default function VideoForm(props) {
         }
 
 
+        }
+        
     }
 
     function fileUpload(file, type) {
@@ -302,7 +307,7 @@ export default function VideoForm(props) {
             }
             {location.pathname === '/createVideo' ?
                 <button type="submit" className="bg-blue-600 w-fit px-4 py-2 rounded-lg hover:cursor-pointer hover:bg-blue-800">Upload Video</button> :
-                <button type="submit" className="bg-blue-600 w-fit px-4 py-2 rounded-lg hover:cursor-pointer hover:bg-blue-800">Edit Video</button>
+                <button disabled={videoUrl === '' && imgUrl === ''} type="submit" className="bg-blue-600 w-fit px-4 py-2 rounded-lg hover:cursor-pointer hover:bg-blue-800">Edit Video</button>
             }
 
         </form>
